@@ -13,12 +13,22 @@ module mojo_top (
     input avr_rx_busy       // AVR RX buffer full
   ) {
   
-  sig rst;                  // reset signal
+  sig rst;                                    // reset signal
+  alu alu;                                    // alu (input: 1st number, 2nd number, alufn) (output:answer based on operation)
+  led_module led_module;                      // displays on the led using the registers (input: LED registers) (output: LED output)
+  check_player_module check_player_module;    // check whether button is from correct player
+  check_step_module check_step_module;        // check whether step is correct
+  answer_key_module answer_key_module;        // reads the answer key and outputs LRUD
+  button_module button_module;                // reads which button is from which player and its LRUD
+  convert_to_alu convert_to_alu;              // reads LRUD and outputs the alufn and 16bit input into alu
+  regfile regfile;                            // changes value of led register to 1 and all other led register to 0 (input: address of register)
+  
   
   .clk(clk) {
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
+    edge_detector edge_detector (#RISE(1), #FALL(0)); //initialize edge_detector to detect edges
     .rst(rst) {
       dff current_map;
       dff current_step[2];
@@ -27,6 +37,8 @@ module mojo_top (
       dff reg_led[16];
       dff answer_player;
       dff current_pos[4];
+      fsm state = {START, SET_MAP, SET_START, SET_STEP, IDLE, CHECK_PLAYER, CHECK_STEP, WAIT, WIN, ERROR};
+      counter ctr (#SIZE(1), #DIV(25));   // Initialize counter to count every 2^25(~33.5 million) clock cycle, on MOJO is 50 million clock cycle per second 
     }
   }
   
@@ -38,5 +50,42 @@ module mojo_top (
     spi_miso = bz;          // not using SPI
     spi_channel = bzzzz;    // not using flags
     avr_rx = bz;            // not using serial port
+    edge_detector.in = bz; // Have 0 output from edge_detector
+    
+    if(dip){
+      edge_detector.in = ctr.value;      // Input value of counter into edge detector
+    }
+      
+    case (state.q) {
+      state.START:
+        led = 1;
+        
+      state.SET_MAP:
+        led = 1;
+        
+      state.SET_START:
+        led = 1;
+        
+      state.SET_STEP:
+        led = 1;
+      
+      state.IDLE:
+        led = 1;
+        
+      state.CHECK_PLAYER:
+        led = 1;
+        
+      state.CHECK_STEP:
+        led = 1;
+        
+      state.WAIT:
+        led = 1;
+        
+      state.WIN:
+        led = 1;
+        
+      state.ERROR:
+        led = 1;
+    }
   }
 }

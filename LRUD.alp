@@ -2,6 +2,8 @@
 <project name="LRUD" board="Mojo" language="Lucid" version="2">
   <files>
     <src top="true">mojo_top.luc</src>
+    <component>edge_detector.luc</component>
+    <component>counter.luc</component>
     <component>reset_conditioner.luc</component>
     <constraint lib="true">mojo.ucf</constraint>
   </files>
