@@ -1,25 +1,3 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="LRUD" board="Mojo" language="Lucid" version="2">
-  <files>
-    <component>reset_conditioner.luc</component>
-    <src>check_step_module.luc</src>
-    <component>edge_detector.luc</component>
-    <src>convert_to_alu.luc</src>
-    <src>button_module.luc</src>
-    <src>led_module.luc</src>
-    <component>counter.luc</component>
-    <src top="true">mojo_top.luc</src>
-    <src>alu.luc</src>
-    <src>answer_key_module.luc</src>
-    <src>regfile.luc</src>
-    <src>check_player_module.luc</src>
-    <src>button.luc</src>
-    <constraint lib="true">mojo.ucf</constraint>
-    <constraint>custom.ucf</constraint>
-  </files>
-</project>
-=======
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="LRUD" board="Mojo" language="Lucid" version="2">
   <files>
@@ -42,7 +20,6 @@
     <src>answer_key_module.luc</src>
     <src top="true">mojo_top.luc</src>
     <src>dec_ctr.luc</src>
-    <src>alu.luc</src>
     <component>reset_conditioner.luc</component>
     <src>convert_to_alu.luc</src>
     <component>edge_detector.luc</component>
@@ -52,4 +29,3 @@
     <constraint lib="true">mojo.ucf</constraint>
   </files>
 </project>
->>>>>>> master

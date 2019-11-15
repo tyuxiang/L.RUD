@@ -1,10 +1,15 @@
 module check_player_module (
     input clk,  // clock
     input rst,  // reset
-    output out
+    output check_player,
+    input answer_player,
+    input player
   ) {
-
+  
   always {
-    out = 0;
+    if (player==answer_player){
+      check_player=1;}
+    else{check_player=0;}
+    
   }
 }
