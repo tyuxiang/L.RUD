@@ -23,33 +23,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="LRUD" board="Mojo" language="Lucid" version="2">
   <files>
-    <src>mult_seven_seg.luc</src>
-    <src>seven_seg.luc</src>
-    <component>reset_conditioner.luc</component>
-    <src>move.luc</src>
-    <src>convert_to_alu.luc</src>
-    <component>decoder.luc</component>
-    <component>pn_gen.luc</component>
-    <src>mult_dec_ctr.luc</src>
-    <src>new_alu.luc</src>
-    <src>answer_key_module.luc</src>
-    <src>comp.luc</src>
+    <src>check_step_module.luc</src>
     <src>nv.luc</src>
-    <src>bool.luc</src>
-    <component>edge_detector.luc</component>
-    <src top="true">mojo_top.luc</src>
+    <src>shft.luc</src>
+    <src>comp.luc</src>
+    <src>mult_dec_ctr.luc</src>
     <component>counter.luc</component>
+    <src>seven_seg.luc</src>
     <src>led_module.luc</src>
-    <src>check_player_module.luc</src>
+    <component>decoder.luc</component>
     <src>adder.luc</src>
+    <src>new_alu.luc</src>
+    <src>bool.luc</src>
+    <src>mult_seven_seg.luc</src>
+    <src>move.luc</src>
     <src>button_module.luc</src>
+    <component>pn_gen.luc</component>
+    <src>answer_key_module.luc</src>
+    <src top="true">mojo_top.luc</src>
     <src>dec_ctr.luc</src>
     <src>alu.luc</src>
-    <src>check_step_module.luc</src>
-    <src>shft.luc</src>
+    <component>reset_conditioner.luc</component>
+    <src>convert_to_alu.luc</src>
+    <component>edge_detector.luc</component>
+    <src>check_player_module.luc</src>
+    <constraint>custom.ucf</constraint>
     <constraint>io_shield.ucf</constraint>
     <constraint lib="true">mojo.ucf</constraint>
-    <constraint>custom.ucf</constraint>
   </files>
 </project>
 >>>>>>> master
