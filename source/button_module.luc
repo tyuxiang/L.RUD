@@ -1,0 +1,11 @@
+module button_module (
+    input clk,  // clock
+    input rst,  // reset
+    input a,
+    output out
+  ) {
+
+  always {
+    out = 0;
+  }
+}

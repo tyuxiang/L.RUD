@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="LRUD" board="Mojo" language="Lucid" version="2">
   <files>
-    <component>edge_detector.luc</component>
-    <src top="true">mojo_top.luc</src>
+    <src>check_step_module.luc</src>
     <component>counter.luc</component>
-    <component>pn_gen.luc</component>
-    <component>reset_conditioner.luc</component>
+    <src>led_module.luc</src>
+    <src>button_module.luc</src>
     <src>answer_key_module.luc</src>
-    <constraint lib="true">mojo.ucf</constraint>
+    <src top="true">mojo_top.luc</src>
+    <src>regfile.luc</src>
+    <src>alu.luc</src>
+    <component>reset_conditioner.luc</component>
+    <src>convert_to_alu.luc</src>
+    <component>edge_detector.luc</component>
+    <src>check_player_module.luc</src>
     <constraint>custom.ucf</constraint>
+    <constraint lib="true">mojo.ucf</constraint>
   </files>
 </project>
