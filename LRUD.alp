@@ -9,6 +9,7 @@
     <src top="true">mojo_top.luc</src>
     <src>regfile.luc</src>
     <src>alu.luc</src>
+    <src>move.luc</src>
     <component>reset_conditioner.luc</component>
     <src>convert_to_alu.luc</src>
     <component>edge_detector.luc</component>
