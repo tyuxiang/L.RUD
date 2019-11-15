@@ -11,18 +11,22 @@ module mojo_top (
     input avr_tx,           // AVR TX (FPGA RX)
     output avr_rx,          // AVR RX (FPGA TX)
     input avr_rx_busy,       // AVR RX buffer full
-    input dip
+    output io_led [3][8],   // LEDs on IO Shield
+    output io_seg [8],      // 7-segment LEDs on IO Shield
+    output io_sel [4],      // Digit select on IO Shield
+    input io_button [5],    // 5 buttons on IO Shield
+    input io_dip [3][8]     // DIP switches on IO Shield
   ) {
   
   sig rst;                                    // reset signal
-  alu alu;                                    // alu (input: 1st number, 2nd number, alufn) (output:answer based on operation)
-  led_module led_module;                      // displays on the led using the registers (input: LED registers) (output: LED output)
-  check_player_module check_player_module;    // check whether button is from correct player
-  check_step_module check_step_module;        // check whether step is correct
-  answer_key_module answer_key_module;        // reads the answer key and outputs LRUD
-  button_module button_module;                // reads which button is from which player and its LRUD
-  convert_to_alu convert_to_alu;              // reads LRUD and outputs the alufn and 16bit input into alu
-  move move;                                  // changes value of led register to 1 and all other led register to 0 (input: address of register)
+  //alu alu;                                    // alu (input: 1st number, 2nd number, alufn) (output:answer based on operation)
+  //led_module led_module;                      // displays on the led using the registers (input: LED registers) (output: LED output)
+  //check_player_module check_player_module;    // check whether button is from correct player
+  //check_step_module check_step_module;        // check whether step is correct
+  //answer_key_module answer_key_module;        // reads the answer key and outputs LRUD
+  //button_module button_module;                // reads which button is from which player and its LRUD
+  //convert_to_alu convert_to_alu;              // reads LRUD and outputs the alufn and 16bit input into alu
+  //move move;                                  // changes value of led register to 1 and all other led register to 0 (input: address of register)
   
   
   .clk(clk) {
@@ -56,23 +60,35 @@ module mojo_top (
     avr_rx = bz;            // not using serial port
     edge_detector.in = bz; // Have 0 output from edge_detector
     
-    rng.seed = seed.q;              // use seed.q as the seed
-    rng.next = 0;                   // don't generate new numbers
+    io_led = 3x{{8h00}};    // turn LEDs off
+    io_seg = 8hff;          // turn segments off
+    io_sel = 4hf;           // select no digits
+    
+    rng.seed = seed.q;      // use seed.q as the seed
+    rng.next = 0;           // don't generate new numbers
     rng.rst = rst;
     
-    if(dip){
+    io_led[0][0] = current_map.q;
+    
+    if(io_dip[2][7]){
       edge_detector.in = ctr.value;      // Input value of counter into edge detector
     }
       
     case (state.q) {
       state.START:
-        if(dip & edge_detector.out){
+        io_led[2][7] = 1;
+        if(io_dip[2][7] & edge_detector.out){
           state.d = state.SET_MAP;
         }
         
       state.SET_MAP:
-        led = 1;
-        
+        io_led[2][6] = 1;
+        rng.next = 1;
+        current_map.d = rng.num[0];
+        if(edge_detector.out){
+          state.d = state.START;
+        }
+
       state.SET_START:
         led = 1;
         
