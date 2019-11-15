@@ -5,11 +5,12 @@ module check_player_module (
     input answer_player,
     input player
   ) {
-  
+  new_alu alu;
   always {
-    if (player==answer_player){
-      check_player=1;}
-    else{check_player=0;}
-    
+    check_player=hx;
+    alu.firstNumber=player;
+    alu.secondNumber=answer_player;
+    alu.alufn=b110011;
+    check_player=alu.answer;
   }
 }
