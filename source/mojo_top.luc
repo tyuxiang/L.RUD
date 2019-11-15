@@ -10,7 +10,8 @@ module mojo_top (
     output spi_channel [4], // AVR general purpose pins (used by default to select ADC channel)
     input avr_tx,           // AVR TX (FPGA RX)
     output avr_rx,          // AVR RX (FPGA TX)
-    input avr_rx_busy       // AVR RX buffer full
+    input avr_rx_busy,       // AVR RX buffer full
+    input dip
   ) {
   
   sig rst;                                    // reset signal
@@ -21,7 +22,7 @@ module mojo_top (
   answer_key_module answer_key_module;        // reads the answer key and outputs LRUD
   button_module button_module;                // reads which button is from which player and its LRUD
   convert_to_alu convert_to_alu;              // reads LRUD and outputs the alufn and 16bit input into alu
-  regfile regfile;                            // changes value of led register to 1 and all other led register to 0 (input: address of register)
+  move move;                                  // changes value of led register to 1 and all other led register to 0 (input: address of register)
   
   
   .clk(clk) {
@@ -37,9 +38,12 @@ module mojo_top (
       dff reg_led[16];
       dff answer_player;
       dff current_pos[4];
-      fsm state = {START, SET_MAP, SET_START, SET_STEP, IDLE, CHECK_PLAYER, CHECK_STEP, WAIT, WIN, ERROR};
-      counter ctr (#SIZE(1), #DIV(25));   // Initialize counter to count every 2^25(~33.5 million) clock cycle, on MOJO is 50 million clock cycle per second 
+      dff seed [32];                      // seed for each run
+      fsm state = {START, SET_MAP, SET_START, SET_STEP, IDLE, CHECK_PLAYER, CHECK_STEP, WIN, ERROR};
+      counter ctr (#SIZE(1), #DIV(25));   // Initialize counter to count every 2^25(~33.5 million) clock cycle, on MOJO is 50 million clock cycle per reset_cond
+      
     }
+    pn_gen rng; 
   }
   
   always {
@@ -52,13 +56,19 @@ module mojo_top (
     avr_rx = bz;            // not using serial port
     edge_detector.in = bz; // Have 0 output from edge_detector
     
+    rng.seed = seed.q;              // use seed.q as the seed
+    rng.next = 0;                   // don't generate new numbers
+    rng.rst = rst;
+    
     if(dip){
       edge_detector.in = ctr.value;      // Input value of counter into edge detector
     }
       
     case (state.q) {
       state.START:
-        led = 1;
+        if(dip & edge_detector.out){
+          state.d = state.SET_MAP;
+        }
         
       state.SET_MAP:
         led = 1;
@@ -76,9 +86,6 @@ module mojo_top (
         led = 1;
         
       state.CHECK_STEP:
-        led = 1;
-        
-      state.WAIT:
         led = 1;
         
       state.WIN:

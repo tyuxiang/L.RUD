@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="LRUD" board="Mojo" language="Lucid" version="2">
   <files>
-    <src>answer_key_module.luc</src>
+    <component>edge_detector.luc</component>
     <src top="true">mojo_top.luc</src>
     <component>counter.luc</component>
+    <component>pn_gen.luc</component>
     <component>reset_conditioner.luc</component>
-    <component>edge_detector.luc</component>
-    <constraint>custom.ucf</constraint>
+    <src>answer_key_module.luc</src>
     <constraint lib="true">mojo.ucf</constraint>
+    <constraint>custom.ucf</constraint>
   </files>
 </project>
