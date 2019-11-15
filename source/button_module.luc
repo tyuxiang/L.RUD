@@ -1,11 +1,49 @@
 module button_module (
-    input clk,  // clock
-    input rst,  // reset
-    input a,
-    output out
+    input button[3],
+    output player,
+    output lrud[2]
   ) {
 
   always {
-    out = 0;
+    player = hx;
+    lrud = hx;
+    if(button == b000){
+      player = b0;
+      lrud = b00;
   }
+  else if(button == b001){
+      player = b0;
+      lrud = b01;
+  }
+  
+  else if(button == b010){
+      player = b0;
+      lrud = b10;
+  }
+  
+  else if(button == b011){
+      player = b0;
+      lrud = b11;
+  }
+    
+  else if(button == b100){
+      player = b1;
+      lrud = b00;
+  }
+      
+  else if(button == b101){
+      player = b1;
+      lrud = b01;
+  }
+  
+  else if(button == b110){
+      player = b1;
+      lrud = b10;
+  }
+  
+  else if(button == b111){
+      player = b1;
+      lrud = b11;
+  }
+          
 }
