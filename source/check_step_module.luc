@@ -1,10 +1,15 @@
 module check_step_module (
-    input clk,  // clock
-    input rst,  // reset
+    input lrud_player,
+    input lrud_answer,
     output out
   ) {
-
+  new_alu alu;
   always {
-    out = 0;
+    out = hx;
+    alu.firstNumber = lrud_player;
+    alu.secondNumber = lrud_answer;
+    alu.alufn = b100100;
+    out = alu.answer;
+    
   }
 }
