@@ -5,7 +5,7 @@ module answer_key_module (
     input current_map[16],
     output lrud[2]
   ) {
-  
+
   always {
     lrud = hx;
     if (current_step == 1) {
