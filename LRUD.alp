@@ -10,6 +10,7 @@
     <src>regfile.luc</src>
     <src>alu.luc</src>
     <src>move.luc</src>
+    <component>decoder.luc</component>
     <component>reset_conditioner.luc</component>
     <src>convert_to_alu.luc</src>
     <component>edge_detector.luc</component>
