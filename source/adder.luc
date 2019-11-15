@@ -1,0 +1,31 @@
+module adder (
+    input firstNumber[16],  // input of 1st number
+    input secondNumber[16], // inoput of 2nd number
+    input alufn[2],         // input of alufn
+    output answer[16]       // output of answer
+  ) {
+
+  always {
+    answer = hx;
+    
+    //addition
+    if(alufn == b00){
+      answer = $signed(firstNumber) + $signed(secondNumber);
+    }
+    
+    //subtraction
+    if(alufn == b01){
+      answer = $signed(firstNumber) - $signed(secondNumber);
+    }
+    
+    //multiplication
+    if(alufn == b10){
+      answer = $signed(firstNumber) * $signed(secondNumber);
+    }
+    
+    //division
+    if(alufn == b11){
+      answer = $signed(firstNumber) / $signed(secondNumber);
+    }
+  }
+}

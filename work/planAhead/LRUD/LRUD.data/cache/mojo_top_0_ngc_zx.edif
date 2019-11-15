@@ -4,7 +4,7 @@
   (keywordMap (keywordLevel 0))
   (status
     (written
-      (timestamp 2019 11 15 17 28 21)
+      (timestamp 2019 11 15 17 58 25)
       (program "Xilinx ngc2edif" (version "P.20131013"))
       (author "Xilinx. Inc ")
       (comment "This EDIF netlist is to be used within supported synthesis tools")
@@ -36,26 +36,6 @@
           )
       )
     )
-    (cell FDR
-      (cellType GENERIC)
-        (view view_1
-          (viewType NETLIST)
-          (interface
-            (port C
-              (direction INPUT)
-            )
-            (port D
-              (direction INPUT)
-            )
-            (port R
-              (direction INPUT)
-            )
-            (port Q
-              (direction OUTPUT)
-            )
-          )
-      )
-    )
     (cell LUT2
       (cellType GENERIC)
         (view view_1
@@ -65,29 +45,6 @@
               (direction INPUT)
             )
             (port I1
-              (direction INPUT)
-            )
-            (port O
-              (direction OUTPUT)
-            )
-          )
-      )
-    )
-    (cell LUT4
-      (cellType GENERIC)
-        (view view_1
-          (viewType NETLIST)
-          (interface
-            (port I0
-              (direction INPUT)
-            )
-            (port I1
-              (direction INPUT)
-            )
-            (port I2
-              (direction INPUT)
-            )
-            (port I3
               (direction INPUT)
             )
             (port O
@@ -141,7 +98,7 @@
           )
       )
     )
-    (cell LUT3
+    (cell LUT4
       (cellType GENERIC)
         (view view_1
           (viewType NETLIST)
@@ -153,6 +110,52 @@
               (direction INPUT)
             )
             (port I2
+              (direction INPUT)
+            )
+            (port I3
+              (direction INPUT)
+            )
+            (port O
+              (direction OUTPUT)
+            )
+          )
+      )
+    )
+    (cell FD
+      (cellType GENERIC)
+        (view view_1
+          (viewType NETLIST)
+          (interface
+            (port C
+              (direction INPUT)
+            )
+            (port D
+              (direction INPUT)
+            )
+            (port Q
+              (direction OUTPUT)
+            )
+          )
+      )
+    )
+    (cell LUT5
+      (cellType GENERIC)
+        (view view_1
+          (viewType NETLIST)
+          (interface
+            (port I0
+              (direction INPUT)
+            )
+            (port I1
+              (direction INPUT)
+            )
+            (port I2
+              (direction INPUT)
+            )
+            (port I3
+              (direction INPUT)
+            )
+            (port I4
               (direction INPUT)
             )
             (port O
@@ -209,32 +212,6 @@
           )
       )
     )
-    (cell LUT5
-      (cellType GENERIC)
-        (view view_1
-          (viewType NETLIST)
-          (interface
-            (port I0
-              (direction INPUT)
-            )
-            (port I1
-              (direction INPUT)
-            )
-            (port I2
-              (direction INPUT)
-            )
-            (port I3
-              (direction INPUT)
-            )
-            (port I4
-              (direction INPUT)
-            )
-            (port O
-              (direction OUTPUT)
-            )
-          )
-      )
-    )
     (cell LUT6
       (cellType GENERIC)
         (view view_1
@@ -259,6 +236,26 @@
               (direction INPUT)
             )
             (port O
+              (direction OUTPUT)
+            )
+          )
+      )
+    )
+    (cell FDR
+      (cellType GENERIC)
+        (view view_1
+          (viewType NETLIST)
+          (interface
+            (port C
+              (direction INPUT)
+            )
+            (port D
+              (direction INPUT)
+            )
+            (port R
+              (direction INPUT)
+            )
+            (port Q
               (direction OUTPUT)
             )
           )
@@ -327,23 +324,6 @@
               (direction INPUT)
             )
             (port S
-              (direction INPUT)
-            )
-            (port Q
-              (direction OUTPUT)
-            )
-          )
-      )
-    )
-    (cell FD
-      (cellType GENERIC)
-        (view view_1
-          (viewType NETLIST)
-          (interface
-            (port C
-              (direction INPUT)
-            )
-            (port D
               (direction INPUT)
             )
             (port Q
@@ -522,11 +502,6 @@
               (direction OUTPUT))
           )
           (contents
-            (instance M_ctr_q_0
-              (viewRef view_1 (cellRef FDR (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "0") (owner "Xilinx"))
-            )
             (instance M_ctr_q_1
               (viewRef view_1 (cellRef FDR (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
@@ -981,22 +956,31 @@
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
               (property INIT (string "2") (owner "Xilinx"))
             )
+            (instance (rename M_ctr_q_0_rstpot_renamed_27 "M_ctr_q_0_rstpot")
+              (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "2") (owner "Xilinx"))
+            )
+            (instance M_ctr_q_0
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
             (instance (rename Mcount_M_ctr_q_lut_0__INV_0 "Mcount_M_ctr_q_lut<0>_INV_0")
               (viewRef view_1 (cellRef INV (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
             )
-            (instance (rename GND_27 "GND")
+            (instance (rename GND_28 "GND")
               (viewRef view_1 (cellRef GND (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
             )
-            (instance (rename VCC_28 "VCC")
+            (instance (rename VCC_29 "VCC")
               (viewRef view_1 (cellRef VCC (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
             )
             (net clk
               (joined
                 (portRef clk)
-                (portRef C (instanceRef M_ctr_q_0))
                 (portRef C (instanceRef M_ctr_q_1))
                 (portRef C (instanceRef M_ctr_q_2))
                 (portRef C (instanceRef M_ctr_q_3))
@@ -1022,18 +1006,18 @@
                 (portRef C (instanceRef M_ctr_q_23))
                 (portRef C (instanceRef M_ctr_q_24))
                 (portRef C (instanceRef M_ctr_q_25))
+                (portRef C (instanceRef M_ctr_q_0))
               )
             )
-            (net (rename Result_0_ "Result<0>")
+            (net (rename Result_1_ "Result<1>")
               (joined
-                (portRef D (instanceRef M_ctr_q_0))
-                (portRef O (instanceRef Mcount_M_ctr_q_xor_0__))
+                (portRef D (instanceRef M_ctr_q_1))
+                (portRef O (instanceRef Mcount_M_ctr_q_xor_1__))
               )
             )
             (net rst
               (joined
                 (portRef rst)
-                (portRef R (instanceRef M_ctr_q_0))
                 (portRef R (instanceRef M_ctr_q_1))
                 (portRef R (instanceRef M_ctr_q_2))
                 (portRef R (instanceRef M_ctr_q_3))
@@ -1059,18 +1043,7 @@
                 (portRef R (instanceRef M_ctr_q_23))
                 (portRef R (instanceRef M_ctr_q_24))
                 (portRef R (instanceRef M_ctr_q_25))
-              )
-            )
-            (net (rename M_ctr_q_0_ "M_ctr_q<0>")
-              (joined
-                (portRef I (instanceRef Mcount_M_ctr_q_lut_0__INV_0))
-                (portRef Q (instanceRef M_ctr_q_0))
-              )
-            )
-            (net (rename Result_1_ "Result<1>")
-              (joined
-                (portRef D (instanceRef M_ctr_q_1))
-                (portRef O (instanceRef Mcount_M_ctr_q_xor_1__))
+                (portRef I1 (instanceRef M_ctr_q_0_rstpot_renamed_27))
               )
             )
             (net (rename M_ctr_q_1_ "M_ctr_q<1>")
@@ -1370,7 +1343,7 @@
             )
             (net led_7_OBUF
               (joined
-                (portRef G (instanceRef GND_27))
+                (portRef G (instanceRef GND_28))
                 (portRef CI (instanceRef Mcount_M_ctr_q_cy_0__))
                 (portRef CI (instanceRef Mcount_M_ctr_q_xor_0__))
                 (portRef DI (instanceRef Mcount_M_ctr_q_cy_1__))
@@ -1399,9 +1372,9 @@
                 (portRef DI (instanceRef Mcount_M_ctr_q_cy_24__))
               )
             )
-            (net (rename io_led_1__inv "io_led<1>_inv")
+            (net (rename io_led_16__inv "io_led<16>_inv")
               (joined
-                (portRef P (instanceRef VCC_28))
+                (portRef P (instanceRef VCC_29))
                 (portRef DI (instanceRef Mcount_M_ctr_q_cy_0__))
               )
             )
@@ -1417,6 +1390,12 @@
                 (portRef CI (instanceRef Mcount_M_ctr_q_cy_1__))
                 (portRef CI (instanceRef Mcount_M_ctr_q_xor_1__))
                 (portRef O (instanceRef Mcount_M_ctr_q_cy_0__))
+              )
+            )
+            (net (rename Result_0_ "Result<0>")
+              (joined
+                (portRef I0 (instanceRef M_ctr_q_0_rstpot_renamed_27))
+                (portRef O (instanceRef Mcount_M_ctr_q_xor_0__))
               )
             )
             (net (rename Mcount_M_ctr_q_cy_1__rt "Mcount_M_ctr_q_cy<1>_rt")
@@ -1760,6 +1739,18 @@
                 (portRef O (instanceRef Mcount_M_ctr_q_xor_25__rt_renamed_26))
               )
             )
+            (net M_ctr_q_0_rstpot
+              (joined
+                (portRef D (instanceRef M_ctr_q_0))
+                (portRef O (instanceRef M_ctr_q_0_rstpot_renamed_27))
+              )
+            )
+            (net (rename M_ctr_q_0_ "M_ctr_q<0>")
+              (joined
+                (portRef I (instanceRef Mcount_M_ctr_q_lut_0__INV_0))
+                (portRef Q (instanceRef M_ctr_q_0))
+              )
+            )
           )
       )
     )
@@ -1771,6 +1762,51 @@
             (port clk
               (direction INPUT)
             )
+            (port (rename num_15__ "num<15>")
+              (direction OUTPUT)
+            )
+            (port (rename num_14__ "num<14>")
+              (direction OUTPUT)
+            )
+            (port (rename num_13__ "num<13>")
+              (direction OUTPUT)
+            )
+            (port (rename num_12__ "num<12>")
+              (direction OUTPUT)
+            )
+            (port (rename num_11__ "num<11>")
+              (direction OUTPUT)
+            )
+            (port (rename num_10__ "num<10>")
+              (direction OUTPUT)
+            )
+            (port (rename num_9__ "num<9>")
+              (direction OUTPUT)
+            )
+            (port (rename num_8__ "num<8>")
+              (direction OUTPUT)
+            )
+            (port (rename num_7__ "num<7>")
+              (direction OUTPUT)
+            )
+            (port (rename num_6__ "num<6>")
+              (direction OUTPUT)
+            )
+            (port (rename num_5__ "num<5>")
+              (direction OUTPUT)
+            )
+            (port (rename num_4__ "num<4>")
+              (direction OUTPUT)
+            )
+            (port (rename num_3__ "num<3>")
+              (direction OUTPUT)
+            )
+            (port (rename num_2__ "num<2>")
+              (direction OUTPUT)
+            )
+            (port (rename num_1__ "num<1>")
+              (direction OUTPUT)
+            )
             (port (rename num_0__ "num<0>")
               (direction OUTPUT)
             )
@@ -1780,10 +1816,31 @@
             (port M_current_map_q
               (direction INPUT)
             )
-            (port M_stage_q_3_1
+            (port M_num_q_10
+              (direction INPUT)
+            )
+            (port M_num_q_14
+              (direction INPUT)
+            )
+            (port M_num_q_15
+              (direction INPUT)
+            )
+            (port M_num_q_3
+              (direction INPUT)
+            )
+            (port M_num_q_4
+              (direction INPUT)
+            )
+            (port M_num_q_7
+              (direction INPUT)
+            )
+            (port M_num_q_9
               (direction INPUT)
             )
             (port next
+              (direction INPUT)
+            )
+            (port M_stage_q_3_1
               (direction INPUT)
             )
           )
@@ -2028,16 +2085,6 @@
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
               (property INIT (string "0") (owner "Xilinx"))
             )
-            (instance M_z_q_15
-              (viewRef view_1 (cellRef FDE (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "0") (owner "Xilinx"))
-            )
-            (instance M_z_q_14
-              (viewRef view_1 (cellRef FDE (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "0") (owner "Xilinx"))
-            )
             (instance M_z_q_13
               (viewRef view_1 (cellRef FDE (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
@@ -2053,22 +2100,7 @@
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
               (property INIT (string "0") (owner "Xilinx"))
             )
-            (instance M_z_q_10
-              (viewRef view_1 (cellRef FDE (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "0") (owner "Xilinx"))
-            )
-            (instance M_z_q_9
-              (viewRef view_1 (cellRef FDE (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "0") (owner "Xilinx"))
-            )
             (instance M_z_q_8
-              (viewRef view_1 (cellRef FDE (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "0") (owner "Xilinx"))
-            )
-            (instance M_z_q_7
               (viewRef view_1 (cellRef FDE (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
               (property INIT (string "0") (owner "Xilinx"))
@@ -2079,16 +2111,6 @@
               (property INIT (string "0") (owner "Xilinx"))
             )
             (instance M_z_q_5
-              (viewRef view_1 (cellRef FDE (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "0") (owner "Xilinx"))
-            )
-            (instance M_z_q_4
-              (viewRef view_1 (cellRef FDE (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "0") (owner "Xilinx"))
-            )
-            (instance M_z_q_3
               (viewRef view_1 (cellRef FDE (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
               (property INIT (string "0") (owner "Xilinx"))
@@ -2423,11 +2445,6 @@
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
               (property INIT (string "0") (owner "Xilinx"))
             )
-            (instance Mmux_M_z_d210
-              (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "2") (owner "Xilinx"))
-            )
             (instance Mmux_M_z_d33
               (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
@@ -2442,16 +2459,6 @@
               (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
               (property INIT (string "E") (owner "Xilinx"))
-            )
-            (instance Mmux_M_z_d61
-              (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "2") (owner "Xilinx"))
-            )
-            (instance Mmux_M_z_d71
-              (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "2") (owner "Xilinx"))
             )
             (instance Mmux_M_z_d81
               (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
@@ -2543,16 +2550,6 @@
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
               (property INIT (string "2") (owner "Xilinx"))
             )
-            (instance Mmux_M_z_d261
-              (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "2") (owner "Xilinx"))
-            )
-            (instance Mmux_M_z_d271
-              (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "2") (owner "Xilinx"))
-            )
             (instance Mmux_M_z_d281
               (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
@@ -2563,20 +2560,10 @@
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
               (property INIT (string "E") (owner "Xilinx"))
             )
-            (instance Mmux_M_z_d301
-              (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "2") (owner "Xilinx"))
-            )
             (instance Mmux_M_z_d311
               (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
               (property INIT (string "E") (owner "Xilinx"))
-            )
-            (instance Mmux_M_z_d321
-              (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "2") (owner "Xilinx"))
             )
             (instance Mmux_M_y_d110
               (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
@@ -2896,10 +2883,9 @@
             (instance Mmux_M_x_d321
               (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property PK_HLUTNM (string "___XLNM___4___rng/_n0042_inv1_4") (owner "Xilinx"))
               (property INIT (string "2") (owner "Xilinx"))
             )
-            (instance (rename &_n0042_inv1_renamed_29 "_n0042_inv1")
+            (instance (rename &_n0042_inv1_renamed_30 "_n0042_inv1")
               (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
               (property INIT (string "E") (owner "Xilinx"))
@@ -3012,13 +2998,13 @@
             (instance Mmux_M_w_d241
               (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property PK_HLUTNM (string "___XLNM___3___rng/Mmux_M_w_d241") (owner "Xilinx"))
+              (property PK_HLUTNM (string "___XLNM___2___rng/Mmux_M_w_d241") (owner "Xilinx"))
               (property INIT (string "0096") (owner "Xilinx"))
             )
             (instance Mmux_M_w_d251
               (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property PK_HLUTNM (string "___XLNM___2___rng/Mmux_M_w_d251") (owner "Xilinx"))
+              (property PK_HLUTNM (string "___XLNM___1___rng/Mmux_M_w_d251") (owner "Xilinx"))
               (property INIT (string "FF96") (owner "Xilinx"))
             )
             (instance Mmux_M_w_d261
@@ -3059,7 +3045,7 @@
             (instance Mmux_M_w_d3_SW0
               (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property PK_HLUTNM (string "___XLNM___3___rng/Mmux_M_w_d241") (owner "Xilinx"))
+              (property PK_HLUTNM (string "___XLNM___2___rng/Mmux_M_w_d241") (owner "Xilinx"))
               (property INIT (string "9") (owner "Xilinx"))
             )
             (instance Mmux_M_w_d3
@@ -3070,7 +3056,7 @@
             (instance Mmux_M_w_d4_SW0
               (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property PK_HLUTNM (string "___XLNM___2___rng/Mmux_M_w_d251") (owner "Xilinx"))
+              (property PK_HLUTNM (string "___XLNM___1___rng/Mmux_M_w_d251") (owner "Xilinx"))
               (property INIT (string "6") (owner "Xilinx"))
             )
             (instance Mmux_M_w_d4
@@ -3162,19 +3148,12 @@
                 (portRef C (instanceRef M_w_q_31))
                 (portRef C (instanceRef M_z_q_1))
                 (portRef C (instanceRef M_z_q_2))
-                (portRef C (instanceRef M_z_q_3))
-                (portRef C (instanceRef M_z_q_4))
                 (portRef C (instanceRef M_z_q_5))
                 (portRef C (instanceRef M_z_q_6))
-                (portRef C (instanceRef M_z_q_7))
                 (portRef C (instanceRef M_z_q_8))
-                (portRef C (instanceRef M_z_q_9))
-                (portRef C (instanceRef M_z_q_10))
                 (portRef C (instanceRef M_z_q_11))
                 (portRef C (instanceRef M_z_q_12))
                 (portRef C (instanceRef M_z_q_13))
-                (portRef C (instanceRef M_z_q_14))
-                (portRef C (instanceRef M_z_q_15))
                 (portRef C (instanceRef M_z_q_16))
                 (portRef C (instanceRef M_z_q_17))
                 (portRef C (instanceRef M_z_q_18))
@@ -3650,19 +3629,12 @@
               (joined
                 (portRef CE (instanceRef M_z_q_1))
                 (portRef CE (instanceRef M_z_q_2))
-                (portRef CE (instanceRef M_z_q_3))
-                (portRef CE (instanceRef M_z_q_4))
                 (portRef CE (instanceRef M_z_q_5))
                 (portRef CE (instanceRef M_z_q_6))
-                (portRef CE (instanceRef M_z_q_7))
                 (portRef CE (instanceRef M_z_q_8))
-                (portRef CE (instanceRef M_z_q_9))
-                (portRef CE (instanceRef M_z_q_10))
                 (portRef CE (instanceRef M_z_q_11))
                 (portRef CE (instanceRef M_z_q_12))
                 (portRef CE (instanceRef M_z_q_13))
-                (portRef CE (instanceRef M_z_q_14))
-                (portRef CE (instanceRef M_z_q_15))
                 (portRef CE (instanceRef M_z_q_16))
                 (portRef CE (instanceRef M_z_q_17))
                 (portRef CE (instanceRef M_z_q_18))
@@ -3874,30 +3846,6 @@
                 (portRef Q (instanceRef M_z_q_16))
               )
             )
-            (net (rename M_z_d_15__ "M_z_d<15>")
-              (joined
-                (portRef D (instanceRef M_z_q_15))
-                (portRef O (instanceRef Mmux_M_z_d71))
-              )
-            )
-            (net (rename M_z_q_15__ "M_z_q<15>")
-              (joined
-                (portRef I0 (instanceRef Mmux_M_y_d71))
-                (portRef Q (instanceRef M_z_q_15))
-              )
-            )
-            (net (rename M_z_d_14__ "M_z_d<14>")
-              (joined
-                (portRef D (instanceRef M_z_q_14))
-                (portRef O (instanceRef Mmux_M_z_d61))
-              )
-            )
-            (net (rename M_z_q_14__ "M_z_q<14>")
-              (joined
-                (portRef I0 (instanceRef Mmux_M_y_d61))
-                (portRef Q (instanceRef M_z_q_14))
-              )
-            )
             (net (rename M_z_d_13__ "M_z_d<13>")
               (joined
                 (portRef D (instanceRef M_z_q_13))
@@ -3934,30 +3882,6 @@
                 (portRef Q (instanceRef M_z_q_11))
               )
             )
-            (net (rename M_z_d_10__ "M_z_d<10>")
-              (joined
-                (portRef D (instanceRef M_z_q_10))
-                (portRef O (instanceRef Mmux_M_z_d210))
-              )
-            )
-            (net (rename M_z_q_10__ "M_z_q<10>")
-              (joined
-                (portRef I0 (instanceRef Mmux_M_y_d210))
-                (portRef Q (instanceRef M_z_q_10))
-              )
-            )
-            (net (rename M_z_d_9__ "M_z_d<9>")
-              (joined
-                (portRef D (instanceRef M_z_q_9))
-                (portRef O (instanceRef Mmux_M_z_d321))
-              )
-            )
-            (net (rename M_z_q_9__ "M_z_q<9>")
-              (joined
-                (portRef I0 (instanceRef Mmux_M_y_d321))
-                (portRef Q (instanceRef M_z_q_9))
-              )
-            )
             (net (rename M_z_d_8__ "M_z_d<8>")
               (joined
                 (portRef D (instanceRef M_z_q_8))
@@ -3968,18 +3892,6 @@
               (joined
                 (portRef I0 (instanceRef Mmux_M_y_d311))
                 (portRef Q (instanceRef M_z_q_8))
-              )
-            )
-            (net (rename M_z_d_7__ "M_z_d<7>")
-              (joined
-                (portRef D (instanceRef M_z_q_7))
-                (portRef O (instanceRef Mmux_M_z_d301))
-              )
-            )
-            (net (rename M_z_q_7__ "M_z_q<7>")
-              (joined
-                (portRef I0 (instanceRef Mmux_M_y_d301))
-                (portRef Q (instanceRef M_z_q_7))
               )
             )
             (net (rename M_z_d_6__ "M_z_d<6>")
@@ -4004,30 +3916,6 @@
               (joined
                 (portRef I0 (instanceRef Mmux_M_y_d281))
                 (portRef Q (instanceRef M_z_q_5))
-              )
-            )
-            (net (rename M_z_d_4__ "M_z_d<4>")
-              (joined
-                (portRef D (instanceRef M_z_q_4))
-                (portRef O (instanceRef Mmux_M_z_d271))
-              )
-            )
-            (net (rename M_z_q_4__ "M_z_q<4>")
-              (joined
-                (portRef I0 (instanceRef Mmux_M_y_d271))
-                (portRef Q (instanceRef M_z_q_4))
-              )
-            )
-            (net (rename M_z_d_3__ "M_z_d<3>")
-              (joined
-                (portRef D (instanceRef M_z_q_3))
-                (portRef O (instanceRef Mmux_M_z_d261))
-              )
-            )
-            (net (rename M_z_q_3__ "M_z_q<3>")
-              (joined
-                (portRef I0 (instanceRef Mmux_M_y_d261))
-                (portRef Q (instanceRef M_z_q_3))
               )
             )
             (net (rename M_z_d_2__ "M_z_d<2>")
@@ -4253,9 +4141,9 @@
             )
             (net (rename M_w_q_20__ "M_w_q<20>")
               (joined
-                (portRef I2 (instanceRef Mmux_M_w_d121))
                 (portRef I1 (instanceRef Mmux_M_w_d131))
                 (portRef I0 (instanceRef Mmux_M_z_d131))
+                (portRef I1 (instanceRef Mmux_M_w_d121))
                 (portRef Q (instanceRef M_w_q_20))
               )
             )
@@ -4320,9 +4208,9 @@
             )
             (net (rename M_w_q_15__ "M_w_q<15>")
               (joined
-                (portRef I0 (instanceRef Mmux_M_w_d71))
-                (portRef I0 (instanceRef Mmux_M_z_d71))
+                (portRef num_15__)
                 (portRef Q (instanceRef M_w_q_15))
+                (portRef I0 (instanceRef Mmux_M_w_d71))
               )
             )
             (net (rename M_w_d_14__ "M_w_d<14>")
@@ -4333,9 +4221,9 @@
             )
             (net (rename M_w_q_14__ "M_w_q<14>")
               (joined
-                (portRef I0 (instanceRef Mmux_M_w_d61))
-                (portRef I0 (instanceRef Mmux_M_z_d61))
+                (portRef num_14__)
                 (portRef Q (instanceRef M_w_q_14))
+                (portRef I0 (instanceRef Mmux_M_w_d61))
               )
             )
             (net (rename M_w_d_13__ "M_w_d<13>")
@@ -4346,9 +4234,10 @@
             )
             (net (rename M_w_q_13__ "M_w_q<13>")
               (joined
-                (portRef I1 (instanceRef Mmux_M_w_d51))
-                (portRef I0 (instanceRef Mmux_M_z_d51))
+                (portRef num_13__)
                 (portRef Q (instanceRef M_w_q_13))
+                (portRef I0 (instanceRef Mmux_M_z_d51))
+                (portRef I2 (instanceRef Mmux_M_w_d51))
               )
             )
             (net (rename M_w_d_12__ "M_w_d<12>")
@@ -4359,9 +4248,10 @@
             )
             (net (rename M_w_q_12__ "M_w_q<12>")
               (joined
+                (portRef num_12__)
+                (portRef Q (instanceRef M_w_q_12))
                 (portRef I0 (instanceRef Mmux_M_z_d41))
                 (portRef I0 (instanceRef Mmux_M_w_d4))
-                (portRef Q (instanceRef M_w_q_12))
               )
             )
             (net (rename M_w_d_11__ "M_w_d<11>")
@@ -4372,9 +4262,10 @@
             )
             (net (rename M_w_q_11__ "M_w_q<11>")
               (joined
+                (portRef num_11__)
+                (portRef Q (instanceRef M_w_q_11))
                 (portRef I0 (instanceRef Mmux_M_z_d33))
                 (portRef I0 (instanceRef Mmux_M_w_d3))
-                (portRef Q (instanceRef M_w_q_11))
               )
             )
             (net (rename M_w_d_10__ "M_w_d<10>")
@@ -4385,9 +4276,9 @@
             )
             (net (rename M_w_q_10__ "M_w_q<10>")
               (joined
-                (portRef I0 (instanceRef Mmux_M_w_d210))
-                (portRef I0 (instanceRef Mmux_M_z_d210))
+                (portRef num_10__)
                 (portRef Q (instanceRef M_w_q_10))
+                (portRef I0 (instanceRef Mmux_M_w_d210))
               )
             )
             (net (rename M_w_d_9__ "M_w_d<9>")
@@ -4398,9 +4289,9 @@
             )
             (net (rename M_w_q_9__ "M_w_q<9>")
               (joined
-                (portRef I0 (instanceRef Mmux_M_z_d321))
-                (portRef I0 (instanceRef Mmux_M_w_d321))
+                (portRef num_9__)
                 (portRef Q (instanceRef M_w_q_9))
+                (portRef I0 (instanceRef Mmux_M_w_d321))
               )
             )
             (net (rename M_w_d_8__ "M_w_d<8>")
@@ -4411,9 +4302,10 @@
             )
             (net (rename M_w_q_8__ "M_w_q<8>")
               (joined
-                (portRef I0 (instanceRef Mmux_M_z_d311))
-                (portRef I0 (instanceRef Mmux_M_w_d311))
+                (portRef num_8__)
                 (portRef Q (instanceRef M_w_q_8))
+                (portRef I0 (instanceRef Mmux_M_z_d311))
+                (portRef I1 (instanceRef Mmux_M_w_d311))
               )
             )
             (net (rename M_w_d_7__ "M_w_d<7>")
@@ -4424,9 +4316,9 @@
             )
             (net (rename M_w_q_7__ "M_w_q<7>")
               (joined
-                (portRef I1 (instanceRef Mmux_M_w_d301))
-                (portRef I0 (instanceRef Mmux_M_z_d301))
+                (portRef num_7__)
                 (portRef Q (instanceRef M_w_q_7))
+                (portRef I1 (instanceRef Mmux_M_w_d301))
               )
             )
             (net (rename M_w_d_6__ "M_w_d<6>")
@@ -4437,9 +4329,10 @@
             )
             (net (rename M_w_q_6__ "M_w_q<6>")
               (joined
-                (portRef I0 (instanceRef Mmux_M_z_d291))
-                (portRef I0 (instanceRef Mmux_M_w_d291))
+                (portRef num_6__)
                 (portRef Q (instanceRef M_w_q_6))
+                (portRef I2 (instanceRef Mmux_M_w_d291))
+                (portRef I0 (instanceRef Mmux_M_z_d291))
               )
             )
             (net (rename M_w_d_5__ "M_w_d<5>")
@@ -4450,9 +4343,10 @@
             )
             (net (rename M_w_q_5__ "M_w_q<5>")
               (joined
+                (portRef num_5__)
+                (portRef Q (instanceRef M_w_q_5))
                 (portRef I1 (instanceRef Mmux_M_w_d281))
                 (portRef I0 (instanceRef Mmux_M_z_d281))
-                (portRef Q (instanceRef M_w_q_5))
               )
             )
             (net (rename M_w_d_4__ "M_w_d<4>")
@@ -4463,9 +4357,9 @@
             )
             (net (rename M_w_q_4__ "M_w_q<4>")
               (joined
-                (portRef I0 (instanceRef Mmux_M_z_d271))
-                (portRef I0 (instanceRef Mmux_M_w_d271))
+                (portRef num_4__)
                 (portRef Q (instanceRef M_w_q_4))
+                (portRef I0 (instanceRef Mmux_M_w_d271))
               )
             )
             (net (rename M_w_d_3__ "M_w_d<3>")
@@ -4476,9 +4370,9 @@
             )
             (net (rename M_w_q_3__ "M_w_q<3>")
               (joined
-                (portRef I1 (instanceRef Mmux_M_w_d261))
-                (portRef I0 (instanceRef Mmux_M_z_d261))
+                (portRef num_3__)
                 (portRef Q (instanceRef M_w_q_3))
+                (portRef I1 (instanceRef Mmux_M_w_d261))
               )
             )
             (net (rename M_w_d_2__ "M_w_d<2>")
@@ -4489,9 +4383,10 @@
             )
             (net (rename M_w_q_2__ "M_w_q<2>")
               (joined
+                (portRef num_2__)
+                (portRef Q (instanceRef M_w_q_2))
                 (portRef I1 (instanceRef Mmux_M_w_d231))
                 (portRef I0 (instanceRef Mmux_M_z_d231))
-                (portRef Q (instanceRef M_w_q_2))
               )
             )
             (net (rename M_w_d_1__ "M_w_d<1>")
@@ -4502,9 +4397,10 @@
             )
             (net (rename M_w_q_1__ "M_w_q<1>")
               (joined
-                (portRef I0 (instanceRef Mmux_M_z_d121))
-                (portRef I0 (instanceRef Mmux_M_w_d121))
+                (portRef num_1__)
                 (portRef Q (instanceRef M_w_q_1))
+                (portRef I0 (instanceRef Mmux_M_z_d121))
+                (portRef I2 (instanceRef Mmux_M_w_d121))
               )
             )
             (net (rename M_w_d_0__ "M_w_d<0>")
@@ -4554,7 +4450,7 @@
                 (portRef CE (instanceRef M_x_q_29))
                 (portRef CE (instanceRef M_x_q_30))
                 (portRef CE (instanceRef M_x_q_31))
-                (portRef O (instanceRef &_n0042_inv1_renamed_29))
+                (portRef O (instanceRef &_n0042_inv1_renamed_30))
               )
             )
             (net (rename M_x_d_31__ "M_x_d<31>")
@@ -4918,7 +4814,7 @@
             (net (rename M_x_q_6__ "M_x_q<6>")
               (joined
                 (portRef I2 (instanceRef Mmux_M_w_d91))
-                (portRef I2 (instanceRef Mmux_M_w_d291))
+                (portRef I1 (instanceRef Mmux_M_w_d291))
                 (portRef I1 (instanceRef Mmux_M_w_d321))
                 (portRef Q (instanceRef M_x_q_6))
               )
@@ -4933,7 +4829,7 @@
               (joined
                 (portRef I2 (instanceRef Mmux_M_w_d81))
                 (portRef I2 (instanceRef Mmux_M_w_d281))
-                (portRef I1 (instanceRef Mmux_M_w_d311))
+                (portRef I0 (instanceRef Mmux_M_w_d311))
                 (portRef Q (instanceRef M_x_q_5))
               )
             )
@@ -4961,7 +4857,7 @@
               (joined
                 (portRef I2 (instanceRef Mmux_M_w_d61))
                 (portRef I2 (instanceRef Mmux_M_w_d261))
-                (portRef I1 (instanceRef Mmux_M_w_d291))
+                (portRef I0 (instanceRef Mmux_M_w_d291))
                 (portRef Q (instanceRef M_x_q_3))
               )
             )
@@ -4975,7 +4871,7 @@
               (joined
                 (portRef I3 (instanceRef Mmux_M_w_d231))
                 (portRef I4 (instanceRef Mmux_M_w_d281))
-                (portRef I2 (instanceRef Mmux_M_w_d51))
+                (portRef I1 (instanceRef Mmux_M_w_d51))
                 (portRef Q (instanceRef M_x_q_2))
               )
             )
@@ -4987,7 +4883,7 @@
             )
             (net (rename M_x_q_1__ "M_x_q<1>")
               (joined
-                (portRef I1 (instanceRef Mmux_M_w_d121))
+                (portRef I0 (instanceRef Mmux_M_w_d121))
                 (portRef I1 (instanceRef Mmux_M_w_d271))
                 (portRef I2 (instanceRef Mmux_M_w_d4))
                 (portRef Q (instanceRef M_x_q_1))
@@ -5029,12 +4925,9 @@
                 (portRef I5 (instanceRef Mmux_M_w_d261))
                 (portRef I5 (instanceRef Mmux_M_w_d281))
                 (portRef I5 (instanceRef Mmux_M_w_d301))
-                (portRef I1 (instanceRef Mmux_M_z_d210))
                 (portRef I1 (instanceRef Mmux_M_z_d33))
                 (portRef I1 (instanceRef Mmux_M_z_d41))
                 (portRef I1 (instanceRef Mmux_M_z_d51))
-                (portRef I1 (instanceRef Mmux_M_z_d61))
-                (portRef I1 (instanceRef Mmux_M_z_d71))
                 (portRef I1 (instanceRef Mmux_M_z_d81))
                 (portRef I1 (instanceRef Mmux_M_z_d91))
                 (portRef I1 (instanceRef Mmux_M_z_d101))
@@ -5053,13 +4946,9 @@
                 (portRef I1 (instanceRef Mmux_M_z_d231))
                 (portRef I1 (instanceRef Mmux_M_z_d241))
                 (portRef I1 (instanceRef Mmux_M_z_d251))
-                (portRef I1 (instanceRef Mmux_M_z_d261))
-                (portRef I1 (instanceRef Mmux_M_z_d271))
                 (portRef I1 (instanceRef Mmux_M_z_d281))
                 (portRef I1 (instanceRef Mmux_M_z_d291))
-                (portRef I1 (instanceRef Mmux_M_z_d301))
                 (portRef I1 (instanceRef Mmux_M_z_d311))
-                (portRef I1 (instanceRef Mmux_M_z_d321))
                 (portRef I1 (instanceRef Mmux_M_y_d110))
                 (portRef I1 (instanceRef Mmux_M_y_d210))
                 (portRef I1 (instanceRef Mmux_M_y_d33))
@@ -5145,19 +5034,61 @@
                 (portRef I0 (instanceRef Mmux_M_y_d110))
               )
             )
-            (net M_stage_q_3_1
+            (net M_num_q_10
               (joined
-                (portRef M_stage_q_3_1)
-                (portRef I0 (instanceRef &_n0042_inv1_renamed_29))
-                (portRef I0 (instanceRef &_n0042_inv1_1))
-                (portRef I0 (instanceRef &_n0042_inv1_2))
-                (portRef I0 (instanceRef &_n0042_inv1_3))
+                (portRef M_num_q_10)
+                (portRef I0 (instanceRef Mmux_M_y_d210))
+              )
+            )
+            (net M_num_q_14
+              (joined
+                (portRef M_num_q_14)
+                (portRef I0 (instanceRef Mmux_M_y_d61))
+              )
+            )
+            (net M_num_q_15
+              (joined
+                (portRef M_num_q_15)
+                (portRef I0 (instanceRef Mmux_M_y_d71))
+              )
+            )
+            (net M_num_q_3
+              (joined
+                (portRef M_num_q_3)
+                (portRef I0 (instanceRef Mmux_M_y_d261))
+              )
+            )
+            (net M_num_q_4
+              (joined
+                (portRef M_num_q_4)
+                (portRef I0 (instanceRef Mmux_M_y_d271))
+              )
+            )
+            (net M_num_q_7
+              (joined
+                (portRef M_num_q_7)
+                (portRef I0 (instanceRef Mmux_M_y_d301))
+              )
+            )
+            (net M_num_q_9
+              (joined
+                (portRef M_num_q_9)
+                (portRef I0 (instanceRef Mmux_M_y_d321))
               )
             )
             (net next
               (joined
                 (portRef next)
-                (portRef I1 (instanceRef &_n0042_inv1_renamed_29))
+                (portRef I0 (instanceRef &_n0042_inv1_renamed_30))
+                (portRef I0 (instanceRef &_n0042_inv1_1))
+                (portRef I0 (instanceRef &_n0042_inv1_2))
+                (portRef I0 (instanceRef &_n0042_inv1_3))
+              )
+            )
+            (net M_stage_q_3_1
+              (joined
+                (portRef M_stage_q_3_1)
+                (portRef I1 (instanceRef &_n0042_inv1_renamed_30))
                 (portRef I1 (instanceRef &_n0042_inv1_1))
                 (portRef I1 (instanceRef &_n0042_inv1_2))
                 (portRef I1 (instanceRef &_n0042_inv1_3))
@@ -5251,21 +5182,11 @@
               (viewRef view_1 (cellRef GND (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
             )
-            (instance (rename M_state_q_FSM_FFd1_renamed_30 "M_state_q_FSM_FFd1")
-              (viewRef view_1 (cellRef FDR (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property INIT (string "0") (owner "Xilinx"))
-            )
             (instance M_edge_detector_inLogicTrst1
               (viewRef view_1 (cellRef LUT2 (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property PK_HLUTNM (string "___XLNM___0___M_edge_detector_inLogicTrst1") (owner "Xilinx"))
               (property INIT (string "D") (owner "Xilinx"))
-            )
-            (instance (rename M_state_q_FSM_FFd1_In1 "M_state_q_FSM_FFd1-In1")
-              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
-              (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property PK_HLUTNM (string "___XLNM___1___M_state_q_FSM_FFd1-In1") (owner "Xilinx"))
-              (property INIT (string "AA48") (owner "Xilinx"))
             )
             (instance (rename io_dip_23_IBUF_renamed_31 "io_dip_23_IBUF")
               (viewRef view_1 (cellRef IBUF (libraryRef UNISIMS)))
@@ -5475,18 +5396,190 @@
               (viewRef view_1 (cellRef OBUFT (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
             )
-            (instance (rename M_current_map_q_rstpot_renamed_34 "M_current_map_q_rstpot")
-              (viewRef view_1 (cellRef LUT3 (libraryRef UNISIMS)))
+            (instance (rename M_num_q_1_rstpot_renamed_34 "M_num_q_1_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
-              (property PK_HLUTNM (string "___XLNM___0___M_current_map_q_rstpot") (owner "Xilinx"))
-              (property INIT (string "E4") (owner "Xilinx"))
+              (property INIT (string "00CA") (owner "Xilinx"))
             )
-            (instance (rename M_current_map_q_renamed_35 "M_current_map_q")
-              (viewRef view_1 (cellRef FDR (libraryRef UNISIMS)))
+            (instance M_num_q_1
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
               (property INIT (string "0") (owner "Xilinx"))
             )
-            (instance (rename clk_BUFGP_renamed_36 "clk_BUFGP")
+            (instance (rename M_num_q_2_rstpot_renamed_35 "M_num_q_2_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00CA") (owner "Xilinx"))
+            )
+            (instance M_num_q_2
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_3_rstpot_renamed_36 "M_num_q_3_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00AC") (owner "Xilinx"))
+            )
+            (instance M_num_q_3
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_4_rstpot_renamed_37 "M_num_q_4_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00AC") (owner "Xilinx"))
+            )
+            (instance M_num_q_4
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_5_rstpot_renamed_38 "M_num_q_5_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00CA") (owner "Xilinx"))
+            )
+            (instance M_num_q_5
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_6_rstpot_renamed_39 "M_num_q_6_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00CA") (owner "Xilinx"))
+            )
+            (instance M_num_q_6
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_7_rstpot_renamed_40 "M_num_q_7_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00AC") (owner "Xilinx"))
+            )
+            (instance M_num_q_7
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_8_rstpot_renamed_41 "M_num_q_8_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00CA") (owner "Xilinx"))
+            )
+            (instance M_num_q_8
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_9_rstpot_renamed_42 "M_num_q_9_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00AC") (owner "Xilinx"))
+            )
+            (instance M_num_q_9
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_10_rstpot_renamed_43 "M_num_q_10_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00AC") (owner "Xilinx"))
+            )
+            (instance M_num_q_10
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_11_rstpot_renamed_44 "M_num_q_11_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00CA") (owner "Xilinx"))
+            )
+            (instance M_num_q_11
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_12_rstpot_renamed_45 "M_num_q_12_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00CA") (owner "Xilinx"))
+            )
+            (instance M_num_q_12
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_13_rstpot_renamed_46 "M_num_q_13_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00CA") (owner "Xilinx"))
+            )
+            (instance M_num_q_13
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_14_rstpot_renamed_47 "M_num_q_14_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "00AC") (owner "Xilinx"))
+            )
+            (instance M_num_q_14
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_num_q_15_rstpot_renamed_48 "M_num_q_15_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property PK_HLUTNM (string "___XLNM___4___rng/_n0042_inv1_4") (owner "Xilinx"))
+              (property INIT (string "00AC") (owner "Xilinx"))
+            )
+            (instance M_num_q_15
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_current_map_q_rstpot_renamed_49 "M_current_map_q_rstpot")
+              (viewRef view_1 (cellRef LUT4 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property PK_HLUTNM (string "___XLNM___3___rng/_n0042_inv1_5") (owner "Xilinx"))
+              (property INIT (string "00AC") (owner "Xilinx"))
+            )
+            (instance (rename M_current_map_q_renamed_50 "M_current_map_q")
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_state_q_FSM_FFd1_renamed_51 "M_state_q_FSM_FFd1")
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_state_q_FSM_FFd1_1_renamed_52 "M_state_q_FSM_FFd1_1")
+              (viewRef view_1 (cellRef FD (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "0") (owner "Xilinx"))
+            )
+            (instance (rename M_state_q_FSM_FFd1_rstpot_renamed_53 "M_state_q_FSM_FFd1_rstpot")
+              (viewRef view_1 (cellRef LUT5 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property INIT (string "41404440") (owner "Xilinx"))
+            )
+            (instance (rename M_state_q_FSM_FFd1_1_rstpot_renamed_54 "M_state_q_FSM_FFd1_1_rstpot")
+              (viewRef view_1 (cellRef LUT5 (libraryRef UNISIMS)))
+              (property XSTLIB (boolean (true)) (owner "Xilinx"))
+              (property PK_HLUTNM (string "___XLNM___0___M_edge_detector_inLogicTrst1") (owner "Xilinx"))
+              (property INIT (string "41404440") (owner "Xilinx"))
+            )
+            (instance (rename clk_BUFGP_renamed_55 "clk_BUFGP")
               (viewRef view_1 (cellRef BUFGP (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
             )
@@ -5494,7 +5587,7 @@
               (viewRef view_1 (cellRef INV (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
             )
-            (instance Mram__n006981_INV_0
+            (instance Mram__n008881_INV_0
               (viewRef view_1 (cellRef INV (libraryRef UNISIMS)))
               (property XSTLIB (boolean (true)) (owner "Xilinx"))
             )
@@ -5526,15 +5619,32 @@
             (net io_dip_23_IBUF
               (joined
                 (portRef I0 (instanceRef M_edge_detector_inLogicTrst1))
-                (portRef I1 (instanceRef M_state_q_FSM_FFd1_In1))
                 (portRef O (instanceRef io_dip_23_IBUF_renamed_31))
+                (portRef I3 (instanceRef M_state_q_FSM_FFd1_rstpot_renamed_53))
+                (portRef I3 (instanceRef M_state_q_FSM_FFd1_1_rstpot_renamed_54))
               )
             )
             (net clk_BUFGP
               (joined
-                (portRef C (instanceRef M_state_q_FSM_FFd1_renamed_30))
-                (portRef C (instanceRef M_current_map_q_renamed_35))
-                (portRef O (instanceRef clk_BUFGP_renamed_36))
+                (portRef C (instanceRef M_num_q_1))
+                (portRef C (instanceRef M_num_q_2))
+                (portRef C (instanceRef M_num_q_3))
+                (portRef C (instanceRef M_num_q_4))
+                (portRef C (instanceRef M_num_q_5))
+                (portRef C (instanceRef M_num_q_6))
+                (portRef C (instanceRef M_num_q_7))
+                (portRef C (instanceRef M_num_q_8))
+                (portRef C (instanceRef M_num_q_9))
+                (portRef C (instanceRef M_num_q_10))
+                (portRef C (instanceRef M_num_q_11))
+                (portRef C (instanceRef M_num_q_12))
+                (portRef C (instanceRef M_num_q_13))
+                (portRef C (instanceRef M_num_q_14))
+                (portRef C (instanceRef M_num_q_15))
+                (portRef C (instanceRef M_current_map_q_renamed_50))
+                (portRef C (instanceRef M_state_q_FSM_FFd1_renamed_51))
+                (portRef C (instanceRef M_state_q_FSM_FFd1_1_renamed_52))
+                (portRef O (instanceRef clk_BUFGP_renamed_55))
                 (portRef clk (instanceRef rng))
                 (portRef clk (instanceRef ctr))
                 (portRef clk (instanceRef reset_cond))
@@ -5549,8 +5659,24 @@
             )
             (net M_reset_cond_out
               (joined
-                (portRef R (instanceRef M_state_q_FSM_FFd1_renamed_30))
-                (portRef R (instanceRef M_current_map_q_renamed_35))
+                (portRef I0 (instanceRef M_state_q_FSM_FFd1_rstpot_renamed_53))
+                (portRef I0 (instanceRef M_state_q_FSM_FFd1_1_rstpot_renamed_54))
+                (portRef I3 (instanceRef M_num_q_1_rstpot_renamed_34))
+                (portRef I3 (instanceRef M_num_q_2_rstpot_renamed_35))
+                (portRef I3 (instanceRef M_num_q_3_rstpot_renamed_36))
+                (portRef I3 (instanceRef M_num_q_4_rstpot_renamed_37))
+                (portRef I3 (instanceRef M_num_q_5_rstpot_renamed_38))
+                (portRef I3 (instanceRef M_num_q_6_rstpot_renamed_39))
+                (portRef I3 (instanceRef M_num_q_7_rstpot_renamed_40))
+                (portRef I3 (instanceRef M_num_q_8_rstpot_renamed_41))
+                (portRef I3 (instanceRef M_num_q_9_rstpot_renamed_42))
+                (portRef I3 (instanceRef M_num_q_10_rstpot_renamed_43))
+                (portRef I3 (instanceRef M_num_q_11_rstpot_renamed_44))
+                (portRef I3 (instanceRef M_num_q_12_rstpot_renamed_45))
+                (portRef I3 (instanceRef M_num_q_13_rstpot_renamed_46))
+                (portRef I3 (instanceRef M_num_q_14_rstpot_renamed_47))
+                (portRef I3 (instanceRef M_num_q_15_rstpot_renamed_48))
+                (portRef I3 (instanceRef M_current_map_q_rstpot_renamed_49))
                 (portRef rst (instanceRef rng))
                 (portRef rst (instanceRef ctr))
                 (portRef out (instanceRef reset_cond))
@@ -5559,21 +5685,224 @@
             (net M_ctr_value
               (joined
                 (portRef I1 (instanceRef M_edge_detector_inLogicTrst1))
-                (portRef I2 (instanceRef M_state_q_FSM_FFd1_In1))
+                (portRef I4 (instanceRef M_state_q_FSM_FFd1_rstpot_renamed_53))
+                (portRef I4 (instanceRef M_state_q_FSM_FFd1_1_rstpot_renamed_54))
                 (portRef (member value 0) (instanceRef ctr))
               )
             )
             (net (rename M_rng_num_0_ "M_rng_num<0>")
               (joined
-                (portRef I2 (instanceRef M_current_map_q_rstpot_renamed_34))
+                (portRef I0 (instanceRef M_current_map_q_rstpot_renamed_49))
                 (portRef num_0__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_15_ "M_rng_num<15>")
+              (joined
+                (portRef I0 (instanceRef M_num_q_15_rstpot_renamed_48))
+                (portRef num_15__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_14_ "M_rng_num<14>")
+              (joined
+                (portRef I0 (instanceRef M_num_q_14_rstpot_renamed_47))
+                (portRef num_14__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_13_ "M_rng_num<13>")
+              (joined
+                (portRef I1 (instanceRef M_num_q_13_rstpot_renamed_46))
+                (portRef num_13__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_12_ "M_rng_num<12>")
+              (joined
+                (portRef I1 (instanceRef M_num_q_12_rstpot_renamed_45))
+                (portRef num_12__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_11_ "M_rng_num<11>")
+              (joined
+                (portRef I1 (instanceRef M_num_q_11_rstpot_renamed_44))
+                (portRef num_11__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_10_ "M_rng_num<10>")
+              (joined
+                (portRef I0 (instanceRef M_num_q_10_rstpot_renamed_43))
+                (portRef num_10__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_9_ "M_rng_num<9>")
+              (joined
+                (portRef I0 (instanceRef M_num_q_9_rstpot_renamed_42))
+                (portRef num_9__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_8_ "M_rng_num<8>")
+              (joined
+                (portRef I1 (instanceRef M_num_q_8_rstpot_renamed_41))
+                (portRef num_8__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_7_ "M_rng_num<7>")
+              (joined
+                (portRef I0 (instanceRef M_num_q_7_rstpot_renamed_40))
+                (portRef num_7__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_6_ "M_rng_num<6>")
+              (joined
+                (portRef I1 (instanceRef M_num_q_6_rstpot_renamed_39))
+                (portRef num_6__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_5_ "M_rng_num<5>")
+              (joined
+                (portRef I1 (instanceRef M_num_q_5_rstpot_renamed_38))
+                (portRef num_5__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_4_ "M_rng_num<4>")
+              (joined
+                (portRef I0 (instanceRef M_num_q_4_rstpot_renamed_37))
+                (portRef num_4__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_3_ "M_rng_num<3>")
+              (joined
+                (portRef I0 (instanceRef M_num_q_3_rstpot_renamed_36))
+                (portRef num_3__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_2_ "M_rng_num<2>")
+              (joined
+                (portRef I1 (instanceRef M_num_q_2_rstpot_renamed_35))
+                (portRef num_2__ (instanceRef rng))
+              )
+            )
+            (net (rename M_rng_num_1_ "M_rng_num<1>")
+              (joined
+                (portRef I1 (instanceRef M_num_q_1_rstpot_renamed_34))
+                (portRef num_1__ (instanceRef rng))
+              )
+            )
+            (net (rename M_num_q_15_ "M_num_q<15>")
+              (joined
+                (portRef I (instanceRef io_led_15_OBUF))
+                (portRef Q (instanceRef M_num_q_15))
+                (portRef I1 (instanceRef M_num_q_15_rstpot_renamed_48))
+                (portRef M_num_q_15 (instanceRef rng))
+              )
+            )
+            (net (rename M_num_q_14_ "M_num_q<14>")
+              (joined
+                (portRef I (instanceRef io_led_14_OBUF))
+                (portRef Q (instanceRef M_num_q_14))
+                (portRef I1 (instanceRef M_num_q_14_rstpot_renamed_47))
+                (portRef M_num_q_14 (instanceRef rng))
+              )
+            )
+            (net (rename M_num_q_13_ "M_num_q<13>")
+              (joined
+                (portRef I (instanceRef io_led_13_OBUF))
+                (portRef Q (instanceRef M_num_q_13))
+                (portRef I0 (instanceRef M_num_q_13_rstpot_renamed_46))
+              )
+            )
+            (net (rename M_num_q_12_ "M_num_q<12>")
+              (joined
+                (portRef I (instanceRef io_led_12_OBUF))
+                (portRef Q (instanceRef M_num_q_12))
+                (portRef I0 (instanceRef M_num_q_12_rstpot_renamed_45))
+              )
+            )
+            (net (rename M_num_q_11_ "M_num_q<11>")
+              (joined
+                (portRef I (instanceRef io_led_11_OBUF))
+                (portRef Q (instanceRef M_num_q_11))
+                (portRef I0 (instanceRef M_num_q_11_rstpot_renamed_44))
+              )
+            )
+            (net (rename M_num_q_10_ "M_num_q<10>")
+              (joined
+                (portRef I (instanceRef io_led_10_OBUF))
+                (portRef Q (instanceRef M_num_q_10))
+                (portRef I1 (instanceRef M_num_q_10_rstpot_renamed_43))
+                (portRef M_num_q_10 (instanceRef rng))
+              )
+            )
+            (net (rename M_num_q_9_ "M_num_q<9>")
+              (joined
+                (portRef I (instanceRef io_led_9_OBUF))
+                (portRef Q (instanceRef M_num_q_9))
+                (portRef I1 (instanceRef M_num_q_9_rstpot_renamed_42))
+                (portRef M_num_q_9 (instanceRef rng))
+              )
+            )
+            (net (rename M_num_q_8_ "M_num_q<8>")
+              (joined
+                (portRef I (instanceRef io_led_8_OBUF))
+                (portRef Q (instanceRef M_num_q_8))
+                (portRef I0 (instanceRef M_num_q_8_rstpot_renamed_41))
+              )
+            )
+            (net (rename M_num_q_7_ "M_num_q<7>")
+              (joined
+                (portRef I (instanceRef io_led_7_OBUF))
+                (portRef Q (instanceRef M_num_q_7))
+                (portRef I1 (instanceRef M_num_q_7_rstpot_renamed_40))
+                (portRef M_num_q_7 (instanceRef rng))
+              )
+            )
+            (net (rename M_num_q_6_ "M_num_q<6>")
+              (joined
+                (portRef I (instanceRef io_led_6_OBUF))
+                (portRef Q (instanceRef M_num_q_6))
+                (portRef I0 (instanceRef M_num_q_6_rstpot_renamed_39))
+              )
+            )
+            (net (rename M_num_q_5_ "M_num_q<5>")
+              (joined
+                (portRef I (instanceRef io_led_5_OBUF))
+                (portRef Q (instanceRef M_num_q_5))
+                (portRef I0 (instanceRef M_num_q_5_rstpot_renamed_38))
+              )
+            )
+            (net (rename M_num_q_4_ "M_num_q<4>")
+              (joined
+                (portRef I (instanceRef io_led_4_OBUF))
+                (portRef Q (instanceRef M_num_q_4))
+                (portRef I1 (instanceRef M_num_q_4_rstpot_renamed_37))
+                (portRef M_num_q_4 (instanceRef rng))
+              )
+            )
+            (net (rename M_num_q_3_ "M_num_q<3>")
+              (joined
+                (portRef I (instanceRef io_led_3_OBUF))
+                (portRef Q (instanceRef M_num_q_3))
+                (portRef I1 (instanceRef M_num_q_3_rstpot_renamed_36))
+                (portRef M_num_q_3 (instanceRef rng))
+              )
+            )
+            (net (rename M_num_q_2_ "M_num_q<2>")
+              (joined
+                (portRef I (instanceRef io_led_2_OBUF))
+                (portRef Q (instanceRef M_num_q_2))
+                (portRef I0 (instanceRef M_num_q_2_rstpot_renamed_35))
+              )
+            )
+            (net (rename M_num_q_1_ "M_num_q<1>")
+              (joined
+                (portRef I (instanceRef io_led_1_OBUF))
+                (portRef Q (instanceRef M_num_q_1))
+                (portRef I0 (instanceRef M_num_q_1_rstpot_renamed_34))
               )
             )
             (net M_current_map_q
               (joined
                 (portRef I (instanceRef io_led_0_OBUF))
-                (portRef I1 (instanceRef M_current_map_q_rstpot_renamed_34))
-                (portRef Q (instanceRef M_current_map_q_renamed_35))
+                (portRef Q (instanceRef M_current_map_q_renamed_50))
+                (portRef I1 (instanceRef M_current_map_q_rstpot_renamed_49))
                 (portRef M_current_map_q (instanceRef rng))
               )
             )
@@ -5610,21 +5939,6 @@
                 (portRef I (instanceRef io_led_18_OBUF))
                 (portRef I (instanceRef io_led_17_OBUF))
                 (portRef I (instanceRef io_led_16_OBUF))
-                (portRef I (instanceRef io_led_15_OBUF))
-                (portRef I (instanceRef io_led_14_OBUF))
-                (portRef I (instanceRef io_led_13_OBUF))
-                (portRef I (instanceRef io_led_12_OBUF))
-                (portRef I (instanceRef io_led_11_OBUF))
-                (portRef I (instanceRef io_led_10_OBUF))
-                (portRef I (instanceRef io_led_9_OBUF))
-                (portRef I (instanceRef io_led_8_OBUF))
-                (portRef I (instanceRef io_led_7_OBUF))
-                (portRef I (instanceRef io_led_6_OBUF))
-                (portRef I (instanceRef io_led_5_OBUF))
-                (portRef I (instanceRef io_led_4_OBUF))
-                (portRef I (instanceRef io_led_3_OBUF))
-                (portRef I (instanceRef io_led_2_OBUF))
-                (portRef I (instanceRef io_led_1_OBUF))
                 (portRef I (instanceRef spi_miso_OBUFT))
                 (portRef I (instanceRef avr_rx_OBUFT))
               )
@@ -5632,7 +5946,7 @@
             (net io_led_23_OBUF
               (joined
                 (portRef I (instanceRef io_led_23_OBUF_renamed_33))
-                (portRef O (instanceRef Mram__n006981_INV_0))
+                (portRef O (instanceRef Mram__n008881_INV_0))
               )
             )
             (net spi_miso
@@ -5671,7 +5985,7 @@
                 (portRef O (instanceRef avr_rx_OBUFT))
               )
             )
-            (net (rename io_led_1__inv "io_led<1>_inv")
+            (net (rename io_led_16__inv "io_led<16>_inv")
               (joined
                 (portRef P (instanceRef XST_VCC))
                 (portRef T (instanceRef spi_channel_3_OBUFT))
@@ -5696,30 +6010,40 @@
             )
             (net M_last_q
               (joined
-                (portRef I3 (instanceRef M_state_q_FSM_FFd1_In1))
+                (portRef I2 (instanceRef M_state_q_FSM_FFd1_rstpot_renamed_53))
+                (portRef I2 (instanceRef M_state_q_FSM_FFd1_1_rstpot_renamed_54))
                 (portRef M_last_q (instanceRef edge_detector))
-              )
-            )
-            (net (rename M_state_q_FSM_FFd1_In "M_state_q_FSM_FFd1-In")
-              (joined
-                (portRef D (instanceRef M_state_q_FSM_FFd1_renamed_30))
-                (portRef O (instanceRef M_state_q_FSM_FFd1_In1))
               )
             )
             (net M_state_q_FSM_FFd1
               (joined
-                (portRef Q (instanceRef M_state_q_FSM_FFd1_renamed_30))
-                (portRef I0 (instanceRef M_state_q_FSM_FFd1_In1))
                 (portRef I (instanceRef io_led_22_OBUF))
-                (portRef I0 (instanceRef M_current_map_q_rstpot_renamed_34))
-                (portRef I (instanceRef Mram__n006981_INV_0))
-                (portRef next (instanceRef rng))
+                (portRef Q (instanceRef M_state_q_FSM_FFd1_renamed_51))
+                (portRef I1 (instanceRef M_state_q_FSM_FFd1_rstpot_renamed_53))
+                (portRef I1 (instanceRef M_state_q_FSM_FFd1_1_rstpot_renamed_54))
+                (portRef I (instanceRef Mram__n008881_INV_0))
+                (portRef I2 (instanceRef M_num_q_1_rstpot_renamed_34))
+                (portRef I2 (instanceRef M_num_q_2_rstpot_renamed_35))
+                (portRef I2 (instanceRef M_num_q_3_rstpot_renamed_36))
+                (portRef I2 (instanceRef M_num_q_4_rstpot_renamed_37))
+                (portRef I2 (instanceRef M_num_q_5_rstpot_renamed_38))
+                (portRef I2 (instanceRef M_num_q_6_rstpot_renamed_39))
+                (portRef I2 (instanceRef M_num_q_7_rstpot_renamed_40))
+                (portRef I2 (instanceRef M_num_q_8_rstpot_renamed_41))
+                (portRef I2 (instanceRef M_num_q_9_rstpot_renamed_42))
+                (portRef I2 (instanceRef M_num_q_10_rstpot_renamed_43))
+                (portRef I2 (instanceRef M_num_q_11_rstpot_renamed_44))
+                (portRef I2 (instanceRef M_num_q_12_rstpot_renamed_45))
+                (portRef I2 (instanceRef M_num_q_13_rstpot_renamed_46))
+                (portRef I2 (instanceRef M_num_q_14_rstpot_renamed_47))
+                (portRef I2 (instanceRef M_num_q_15_rstpot_renamed_48))
+                (portRef I2 (instanceRef M_current_map_q_rstpot_renamed_49))
               )
             )
             (net clk
               (joined
                 (portRef clk)
-                (portRef I (instanceRef clk_BUFGP_renamed_36))
+                (portRef I (instanceRef clk_BUFGP_renamed_55))
               )
             )
             (net (rename io_dip_23_ "io_dip<23>")
@@ -5998,16 +6322,124 @@
                 (portRef O (instanceRef io_sel_0_OBUF))
               )
             )
-            (net M_current_map_q_rstpot
-              (joined
-                (portRef O (instanceRef M_current_map_q_rstpot_renamed_34))
-                (portRef D (instanceRef M_current_map_q_renamed_35))
-              )
-            )
             (net M_stage_q_3_1
               (joined
                 (portRef M_stage_q_3_1 (instanceRef rng))
                 (portRef M_stage_q_3_1 (instanceRef reset_cond))
+              )
+            )
+            (net M_state_q_FSM_FFd1_1
+              (joined
+                (portRef Q (instanceRef M_state_q_FSM_FFd1_1_renamed_52))
+                (portRef next (instanceRef rng))
+              )
+            )
+            (net M_num_q_1_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_1_rstpot_renamed_34))
+                (portRef D (instanceRef M_num_q_1))
+              )
+            )
+            (net M_num_q_2_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_2_rstpot_renamed_35))
+                (portRef D (instanceRef M_num_q_2))
+              )
+            )
+            (net M_num_q_3_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_3_rstpot_renamed_36))
+                (portRef D (instanceRef M_num_q_3))
+              )
+            )
+            (net M_num_q_4_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_4_rstpot_renamed_37))
+                (portRef D (instanceRef M_num_q_4))
+              )
+            )
+            (net M_num_q_5_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_5_rstpot_renamed_38))
+                (portRef D (instanceRef M_num_q_5))
+              )
+            )
+            (net M_num_q_6_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_6_rstpot_renamed_39))
+                (portRef D (instanceRef M_num_q_6))
+              )
+            )
+            (net M_num_q_7_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_7_rstpot_renamed_40))
+                (portRef D (instanceRef M_num_q_7))
+              )
+            )
+            (net M_num_q_8_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_8_rstpot_renamed_41))
+                (portRef D (instanceRef M_num_q_8))
+              )
+            )
+            (net M_num_q_9_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_9_rstpot_renamed_42))
+                (portRef D (instanceRef M_num_q_9))
+              )
+            )
+            (net M_num_q_10_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_10_rstpot_renamed_43))
+                (portRef D (instanceRef M_num_q_10))
+              )
+            )
+            (net M_num_q_11_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_11_rstpot_renamed_44))
+                (portRef D (instanceRef M_num_q_11))
+              )
+            )
+            (net M_num_q_12_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_12_rstpot_renamed_45))
+                (portRef D (instanceRef M_num_q_12))
+              )
+            )
+            (net M_num_q_13_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_13_rstpot_renamed_46))
+                (portRef D (instanceRef M_num_q_13))
+              )
+            )
+            (net M_num_q_14_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_14_rstpot_renamed_47))
+                (portRef D (instanceRef M_num_q_14))
+              )
+            )
+            (net M_num_q_15_rstpot
+              (joined
+                (portRef O (instanceRef M_num_q_15_rstpot_renamed_48))
+                (portRef D (instanceRef M_num_q_15))
+              )
+            )
+            (net M_current_map_q_rstpot
+              (joined
+                (portRef O (instanceRef M_current_map_q_rstpot_renamed_49))
+                (portRef D (instanceRef M_current_map_q_renamed_50))
+              )
+            )
+            (net M_state_q_FSM_FFd1_rstpot
+              (joined
+                (portRef D (instanceRef M_state_q_FSM_FFd1_renamed_51))
+                (portRef O (instanceRef M_state_q_FSM_FFd1_rstpot_renamed_53))
+              )
+            )
+            (net M_state_q_FSM_FFd1_1_rstpot
+              (joined
+                (portRef D (instanceRef M_state_q_FSM_FFd1_1_renamed_52))
+                (portRef O (instanceRef M_state_q_FSM_FFd1_1_rstpot_renamed_54))
               )
             )
           )

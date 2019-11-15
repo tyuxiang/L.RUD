@@ -49,6 +49,7 @@ module mojo_top_0 (
   reg [15:0] M_reg_led_d, M_reg_led_q = 1'h0;
   reg M_answer_player_d, M_answer_player_q = 1'h0;
   reg [3:0] M_current_pos_d, M_current_pos_q = 1'h0;
+  reg [31:0] M_num_d, M_num_q = 1'h0;
   reg [31:0] M_seed_d, M_seed_q = 1'h0;
   localparam START_state = 4'd0;
   localparam SET_MAP_state = 4'd1;
@@ -81,6 +82,7 @@ module mojo_top_0 (
   
   always @* begin
     M_state_d = M_state_q;
+    M_num_d = M_num_q;
     M_current_map_d = M_current_map_q;
     
     M_reset_cond_in = ~rst_n;
@@ -96,6 +98,8 @@ module mojo_top_0 (
     M_rng_seed = M_seed_q;
     M_rng_next = 1'h0;
     M_rng_rst = rst;
+    io_led[8+0+7-:8] = M_num_q[8+7-:8];
+    io_led[0+0+7-:8] = M_num_q[0+7-:8];
     io_led[0+0+0-:1] = M_current_map_q;
     if (io_dip[16+7+0-:1]) begin
       M_edge_detector_in = M_ctr_value;
@@ -111,6 +115,7 @@ module mojo_top_0 (
       SET_MAP_state: begin
         io_led[16+6+0-:1] = 1'h1;
         M_rng_next = 1'h1;
+        M_num_d = M_rng_num;
         M_current_map_d = M_rng_num[0+0-:1];
         if (M_edge_detector_out) begin
           M_state_d = START_state;
@@ -149,6 +154,7 @@ module mojo_top_0 (
       M_reg_led_q <= 1'h0;
       M_answer_player_q <= 1'h0;
       M_current_pos_q <= 1'h0;
+      M_num_q <= 1'h0;
       M_seed_q <= 1'h0;
       M_state_q <= 1'h0;
     end else begin
@@ -159,6 +165,7 @@ module mojo_top_0 (
       M_reg_led_q <= M_reg_led_d;
       M_answer_player_q <= M_answer_player_d;
       M_current_pos_q <= M_current_pos_d;
+      M_num_q <= M_num_d;
       M_seed_q <= M_seed_d;
       M_state_q <= M_state_d;
     end

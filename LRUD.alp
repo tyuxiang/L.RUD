@@ -23,20 +23,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="LRUD" board="Mojo" language="Lucid" version="2">
   <files>
+    <src>mult_seven_seg.luc</src>
+    <src>seven_seg.luc</src>
+    <component>reset_conditioner.luc</component>
+    <src>move.luc</src>
+    <src>convert_to_alu.luc</src>
+    <component>decoder.luc</component>
+    <component>pn_gen.luc</component>
+    <src>mult_dec_ctr.luc</src>
+    <src>new_alu.luc</src>
+    <src>answer_key_module.luc</src>
+    <src>comp.luc</src>
+    <src>nv.luc</src>
+    <src>bool.luc</src>
     <component>edge_detector.luc</component>
     <src top="true">mojo_top.luc</src>
     <component>counter.luc</component>
     <src>led_module.luc</src>
-    <component>reset_conditioner.luc</component>
     <src>check_player_module.luc</src>
-    <src>move.luc</src>
-    <src>convert_to_alu.luc</src>
+    <src>adder.luc</src>
     <src>button_module.luc</src>
+    <src>dec_ctr.luc</src>
     <src>alu.luc</src>
-    <component>pn_gen.luc</component>
     <src>check_step_module.luc</src>
-    <src>regfile.luc</src>
-    <src>answer_key_module.luc</src>
+    <src>shft.luc</src>
     <constraint>io_shield.ucf</constraint>
     <constraint lib="true">mojo.ucf</constraint>
     <constraint>custom.ucf</constraint>

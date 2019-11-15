@@ -21,7 +21,7 @@
     <File Path="$PSRCDIR/constrs_1/imports/Alchitry-labs/Workspace/LRUD/constraint/custom.ucf">
       <FileInfo>
         <Attr Name="ImportPath" Val="$PPRDIR/../../../constraint/custom.ucf"/>
-        <Attr Name="ImportTime" Val="1573809365"/>
+        <Attr Name="ImportTime" Val="1573810543"/>
         <Attr Name="UsedInSynthesis" Val="1"/>
         <Attr Name="UsedInImplementation" Val="1"/>
       </FileInfo>
