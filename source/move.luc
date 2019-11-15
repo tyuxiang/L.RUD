@@ -1,0 +1,13 @@
+module move (
+    input current_pos[4],
+    output reg_led[16]
+  ) {
+  
+  decoder num_to_seg (#WIDTH(4));
+  always {
+    reg_led = hx;
+    num_to_seg.in = current_pos;
+    reg_led = num_to_seg.out;
+    
+  }
+}
