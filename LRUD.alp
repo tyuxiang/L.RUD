@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="LRUD" board="Mojo" language="Lucid" version="2">
   <files>
@@ -18,3 +19,20 @@
     <constraint>custom.ucf</constraint>
   </files>
 </project>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="LRUD" board="Mojo" language="Lucid" version="2">
+  <files>
+    <src top="true">mojo_top.luc</src>
+    <component>pn_gen.luc</component>
+    <src>move.luc</src>
+    <src>answer_key_module.luc</src>
+    <component>counter.luc</component>
+    <component>reset_conditioner.luc</component>
+    <component>edge_detector.luc</component>
+    <component>decoder.luc</component>
+    <constraint lib="true">mojo.ucf</constraint>
+    <constraint>custom.ucf</constraint>
+  </files>
+</project>
+>>>>>>> master
