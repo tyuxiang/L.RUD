@@ -54,18 +54,19 @@ module mojo_top (
       dff current_map[12];
       dff current_step[2];
       dff map_number;
-      dff step_number[2];
+      dff step_number[3];
       dff map_0[12];
       dff map_1[12];
       dff reg_led[16];
       dff answer_player;
       dff current_pos[4];
       dff seed [32];                      // seed for each run
-      fsm state = {START, SET_MAP, SET_START, SET_STEP, IDLE, CHECK_PLAYER, CHECK_STEP, WIN, ERROR};
-      counter ctr (#SIZE(1), #DIV(25));   // Initialize counter to count every 2^25(~33.5 million) clock cycle, on MOJO is 50 million clock cycle per reset_cond
+      dff alu_answer[16];
+      fsm state = {START, SET_MAP, SET_START, SET_STEP, COMPUTE_STEP, OUTPUT_STEP, DISPLAY_STEP, IDLE, CHECK_PLAYER, CHECK_STEP, WIN, ERROR};
+      counter ctr (#SIZE(1), #DIV(24));   // Initialize counter to count every 2^25(~33.5 million) clock cycle, on MOJO is 50 million clock cycle per reset_cond
       
     }
-    pn_gen rng; 
+    pn_gen rng;
   }
   
   always {
@@ -105,15 +106,8 @@ module mojo_top (
     
     convert_to_alu.lrud = b00;              //input zero first
     
-    //00 is left, 01 is right, 10 is up, 11 is down
-    map_0.d = b000001010111; //start at led0 then [right,right,right,down]
-    map_1.d = b111100000010; //start at led15 then [left,left,left,up]
-    answer_player.d = 0;     //initialize starting player to answer to be player 1
-    reg_led.d = 16x{0};      //initialize all led reg to be 0
-    step_number.d = b00;     //initialize step number to be 0
-    seed.d = 32x{0};         //initialize seed number to be 0
-    
     led_module.reg_led = reg_led.q;         //connect reg led to led module
+    
     
     //connect led module output to actual output
     led0 = led_module.led0;
@@ -136,6 +130,13 @@ module mojo_top (
     //io_led[1][7:0] = num.q[15:8];
     //io_led[0][7:0] = num.q[7:0];
     io_led[0][0] = map_number.q;
+    io_led[0][5:1] = current_pos.q;
+    io_led[0][7:6] = current_step.q;
+    io_led[1][2:0] = step_number.q;
+    //io_led[1] = reg_led.q[15:8];
+    //io_led[0] = reg_led.q[7:0];
+    io_led[1] = alu_answer.q[15:8];
+    io_led[0] = alu_answer.q[7:0];
     
     if(io_dip[2][7]){
       edge_detector.in = ctr.value;      // Input value of counter into edge detector
@@ -143,6 +144,12 @@ module mojo_top (
       
     case (state.q) {
       state.START:
+        //00 is left, 01 is right, 10 is up, 11 is down
+        map_0.d = b000001010111; //start at led0 then [right,right,right,down]
+        map_1.d = b111100000010; //start at led15 then [left,left,left,up]
+        answer_player.d = 0;     //initialize starting player to answer to be player 1
+        reg_led.d = b00000000000000000;      //initialize all led reg to be 0
+        step_number.d = b000;     //initialize step number to be 0
         io_led[2][7] = 1;
         if(io_dip[2][7] & edge_detector.out){
           state.d = state.SET_MAP;
@@ -152,24 +159,89 @@ module mojo_top (
         io_led[2][6] = 1;
         rng.next = 1;
         map_number.d = rng.num[0];
+        if(rng.num[0] == 0){
+          current_map.d = map_0.q;
+        }
+        if(rng.num[0] == 1){
+          current_map.d = map_1.q;
+        }
         if(edge_detector.out){
           state.d = state.SET_START;
         }
 
       state.SET_START:
         io_led[2][5] = 1;
-        if(map_number.q == 0){
-          current_pos.d = map_0.q[11:8];
-        }
-        else if(map_number.q == 1){
-          current_pos.d = map_1.q[11:8];
-        }
+        
+        //update current step with first 4 bits of map
+        current_pos.d = current_map.q[11:8];
+        
+        //convert current step to reg_led
+        move.current_pos = current_pos.q;
+        
+        //update reg led with move output
+        reg_led.d = move.reg_led;
+        
         if(edge_detector.out){
-          state.d = state.START;
+          state.d = state.SET_STEP;
         }
         
       state.SET_STEP:
-        led = 1;
+        io_led[2][4] = 1;
+        
+        //set the step based on step_number
+        if(step_number.q == 0){
+          current_step.d = current_map.q[7:6];
+          if(edge_detector.out & current_step.q == current_map.q[7:6]){
+          step_number.d = step_number.q + 1;
+          state.d = state.COMPUTE_STEP;
+          }
+        }
+        else if(step_number.q == 1){
+          current_step.d = current_map.q[5:4];
+          if(edge_detector.out & current_step.q == current_map.q[5:4]){
+          step_number.d = step_number.q + 1;
+          state.d = state.COMPUTE_STEP;
+          }
+        }
+        else if(step_number.q == 2){
+          current_step.d = current_map.q[3:2];
+          if(edge_detector.out & current_step.q == current_map.q[3:2]){
+          step_number.d = step_number.q + 1;
+          state.d = state.COMPUTE_STEP;
+          }
+        }
+        else if(step_number.q == 3){
+          current_step.d = current_map.q[1:0];
+          if(edge_detector.out & current_step.q == current_map.q[1:0]){
+          step_number.d = step_number.q + 1;
+          state.d = state.COMPUTE_STEP;
+          }
+        }
+      
+      state.COMPUTE_STEP:
+        io_led[2][3] = 1;
+        //input current step into convert_to_alu
+        convert_to_alu.lrud = current_step.q;
+        //step_number.d = step_number.q + 1;
+        alu.firstNumber = current_pos.q;
+        alu.secondNumber = convert_to_alu.value;
+        alu.alufn = convert_to_alu.alufn;
+        //update the new current pos
+        current_pos.d = alu.answer[3:0];
+        alu_answer.d = alu.answer;
+        state.d = state.OUTPUT_STEP;
+      
+      state.OUTPUT_STEP:
+        //convert current step to reg_led
+        move.current_pos = current_pos.q;
+        //update reg led with move output
+        reg_led.d = move.reg_led;
+        if(edge_detector.out & step_number.q == 4){
+          state.d = state.START;
+        }
+        else if(edge_detector.out){
+          state.d = state.SET_STEP;
+        }
       
       state.IDLE:
         led = 1;

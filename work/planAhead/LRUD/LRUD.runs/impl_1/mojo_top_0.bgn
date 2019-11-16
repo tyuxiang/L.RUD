@@ -5,7 +5,7 @@ D:\Programs\ISE\14.7\ISE_DS\ISE\.
    "mojo_top_0" is an NCD, version 3.2, device xc6slx9, package tqg144, speed -2
 Opened constraints file mojo_top_0.pcf.
 
-Fri Nov 15 17:58:57 2019
+Sat Nov 16 17:49:57 2019
 
 D:\Programs\ISE\14.7\ISE_DS\ISE\bin\nt64\unwrapped\bitgen.exe -g Binary:Yes -g Compress -w -intstyle pa mojo_top_0_routed.ncd mojo_top_0.bit mojo_top_0.pcf 
 
@@ -129,9 +129,42 @@ There were 1 CONFIG constraint(s) processed from mojo_top_0.pcf.
    CONFIG VCCAUX = "3.3"
 
 Running DRC.
-DRC detected 0 errors and 0 warnings.
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led0_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led1_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led2_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led3_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led4_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led5_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led6_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led7_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led8_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led9_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led10_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led11_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led12_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led13_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led14_PULLUP is set but the tri state is not configured. 
+WARNING:PhysDesignRules:781 - PULLUP on an active net. PULLUP of comp
+   led15_PULLUP is set but the tri state is not configured. 
+DRC detected 0 errors and 16 warnings.  Please see the previously displayed
+individual error or warning messages for more details.
 Creating bit map...
 Saving bit stream in "mojo_top_0.bit".
-Bitstream compression saved 1328288 bits.
+Bitstream compression saved 1169728 bits.
 Saving bit stream in "mojo_top_0.bin".
 Bitstream generation is complete.

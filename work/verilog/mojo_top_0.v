@@ -21,49 +21,176 @@ module mojo_top_0 (
     output reg [7:0] io_seg,
     output reg [3:0] io_sel,
     input [4:0] io_button,
-    input [23:0] io_dip
+    input [23:0] io_dip,
+    output reg led0,
+    output reg led1,
+    output reg led2,
+    output reg led3,
+    output reg led4,
+    output reg led5,
+    output reg led6,
+    output reg led7,
+    output reg led8,
+    output reg led9,
+    output reg led10,
+    output reg led11,
+    output reg led12,
+    output reg led13,
+    output reg led14,
+    output reg led15
   );
   
   
   
   reg rst;
   
+  wire [16-1:0] M_alu_answer;
+  wire [1-1:0] M_alu_n;
+  wire [1-1:0] M_alu_v;
+  wire [1-1:0] M_alu_z;
+  reg [16-1:0] M_alu_firstNumber;
+  reg [16-1:0] M_alu_secondNumber;
+  reg [6-1:0] M_alu_alufn;
+  new_alu_1 alu (
+    .firstNumber(M_alu_firstNumber),
+    .secondNumber(M_alu_secondNumber),
+    .alufn(M_alu_alufn),
+    .answer(M_alu_answer),
+    .n(M_alu_n),
+    .v(M_alu_v),
+    .z(M_alu_z)
+  );
+  
+  wire [1-1:0] M_led_module_led0;
+  wire [1-1:0] M_led_module_led1;
+  wire [1-1:0] M_led_module_led2;
+  wire [1-1:0] M_led_module_led3;
+  wire [1-1:0] M_led_module_led4;
+  wire [1-1:0] M_led_module_led5;
+  wire [1-1:0] M_led_module_led6;
+  wire [1-1:0] M_led_module_led7;
+  wire [1-1:0] M_led_module_led8;
+  wire [1-1:0] M_led_module_led9;
+  wire [1-1:0] M_led_module_led10;
+  wire [1-1:0] M_led_module_led11;
+  wire [1-1:0] M_led_module_led12;
+  wire [1-1:0] M_led_module_led13;
+  wire [1-1:0] M_led_module_led14;
+  wire [1-1:0] M_led_module_led15;
+  reg [16-1:0] M_led_module_reg_led;
+  led_module_2 led_module (
+    .reg_led(M_led_module_reg_led),
+    .led0(M_led_module_led0),
+    .led1(M_led_module_led1),
+    .led2(M_led_module_led2),
+    .led3(M_led_module_led3),
+    .led4(M_led_module_led4),
+    .led5(M_led_module_led5),
+    .led6(M_led_module_led6),
+    .led7(M_led_module_led7),
+    .led8(M_led_module_led8),
+    .led9(M_led_module_led9),
+    .led10(M_led_module_led10),
+    .led11(M_led_module_led11),
+    .led12(M_led_module_led12),
+    .led13(M_led_module_led13),
+    .led14(M_led_module_led14),
+    .led15(M_led_module_led15)
+  );
+  
+  wire [1-1:0] M_check_player_module_check_player;
+  reg [1-1:0] M_check_player_module_answer_player;
+  reg [1-1:0] M_check_player_module_player;
+  check_player_module_3 check_player_module (
+    .answer_player(M_check_player_module_answer_player),
+    .player(M_check_player_module_player),
+    .check_player(M_check_player_module_check_player)
+  );
+  
+  wire [1-1:0] M_check_step_module_out;
+  reg [1-1:0] M_check_step_module_lrud_player;
+  reg [1-1:0] M_check_step_module_lrud_answer;
+  check_step_module_4 check_step_module (
+    .lrud_player(M_check_step_module_lrud_player),
+    .lrud_answer(M_check_step_module_lrud_answer),
+    .out(M_check_step_module_out)
+  );
+  
+  wire [2-1:0] M_answer_key_module_lrud;
+  reg [2-1:0] M_answer_key_module_current_step;
+  reg [16-1:0] M_answer_key_module_current_map;
+  answer_key_module_5 answer_key_module (
+    .current_step(M_answer_key_module_current_step),
+    .current_map(M_answer_key_module_current_map),
+    .lrud(M_answer_key_module_lrud)
+  );
+  
+  wire [1-1:0] M_button_module_player;
+  wire [2-1:0] M_button_module_lrud;
+  reg [3-1:0] M_button_module_button;
+  button_module_6 button_module (
+    .button(M_button_module_button),
+    .player(M_button_module_player),
+    .lrud(M_button_module_lrud)
+  );
+  
+  wire [6-1:0] M_convert_to_alu_alufn;
+  wire [16-1:0] M_convert_to_alu_value;
+  reg [2-1:0] M_convert_to_alu_lrud;
+  convert_to_alu_7 convert_to_alu (
+    .lrud(M_convert_to_alu_lrud),
+    .alufn(M_convert_to_alu_alufn),
+    .value(M_convert_to_alu_value)
+  );
+  
+  wire [16-1:0] M_move_reg_led;
+  reg [4-1:0] M_move_current_pos;
+  move_8 move (
+    .current_pos(M_move_current_pos),
+    .reg_led(M_move_reg_led)
+  );
+  
   wire [1-1:0] M_reset_cond_out;
   reg [1-1:0] M_reset_cond_in;
-  reset_conditioner_1 reset_cond (
+  reset_conditioner_9 reset_cond (
     .clk(clk),
     .in(M_reset_cond_in),
     .out(M_reset_cond_out)
   );
   wire [1-1:0] M_edge_detector_out;
   reg [1-1:0] M_edge_detector_in;
-  edge_detector_2 edge_detector (
+  edge_detector_10 edge_detector (
     .clk(clk),
     .in(M_edge_detector_in),
     .out(M_edge_detector_out)
   );
-  reg M_current_map_d, M_current_map_q = 1'h0;
+  reg [11:0] M_current_map_d, M_current_map_q = 1'h0;
   reg [1:0] M_current_step_d, M_current_step_q = 1'h0;
+  reg M_map_number_d, M_map_number_q = 1'h0;
+  reg [2:0] M_step_number_d, M_step_number_q = 1'h0;
   reg [11:0] M_map_0_d, M_map_0_q = 1'h0;
   reg [11:0] M_map_1_d, M_map_1_q = 1'h0;
   reg [15:0] M_reg_led_d, M_reg_led_q = 1'h0;
   reg M_answer_player_d, M_answer_player_q = 1'h0;
   reg [3:0] M_current_pos_d, M_current_pos_q = 1'h0;
-  reg [31:0] M_num_d, M_num_q = 1'h0;
   reg [31:0] M_seed_d, M_seed_q = 1'h0;
+  reg [15:0] M_alu_answer_d, M_alu_answer_q = 1'h0;
   localparam START_state = 4'd0;
   localparam SET_MAP_state = 4'd1;
   localparam SET_START_state = 4'd2;
   localparam SET_STEP_state = 4'd3;
-  localparam IDLE_state = 4'd4;
-  localparam CHECK_PLAYER_state = 4'd5;
-  localparam CHECK_STEP_state = 4'd6;
-  localparam WIN_state = 4'd7;
-  localparam ERROR_state = 4'd8;
+  localparam COMPUTE_STEP_state = 4'd4;
+  localparam OUTPUT_STEP_state = 4'd5;
+  localparam DISPLAY_STEP_state = 4'd6;
+  localparam IDLE_state = 4'd7;
+  localparam CHECK_PLAYER_state = 4'd8;
+  localparam CHECK_STEP_state = 4'd9;
+  localparam WIN_state = 4'd10;
+  localparam ERROR_state = 4'd11;
   
   reg [3:0] M_state_d, M_state_q = START_state;
   wire [1-1:0] M_ctr_value;
-  counter_3 ctr (
+  counter_11 ctr (
     .clk(clk),
     .rst(rst),
     .value(M_ctr_value)
@@ -72,7 +199,7 @@ module mojo_top_0 (
   reg [1-1:0] M_rng_rst;
   reg [1-1:0] M_rng_next;
   reg [32-1:0] M_rng_seed;
-  pn_gen_4 rng (
+  pn_gen_12 rng (
     .clk(clk),
     .rst(M_rng_rst),
     .next(M_rng_next),
@@ -82,8 +209,16 @@ module mojo_top_0 (
   
   always @* begin
     M_state_d = M_state_q;
-    M_num_d = M_num_q;
+    M_map_0_d = M_map_0_q;
+    M_map_1_d = M_map_1_q;
+    M_step_number_d = M_step_number_q;
+    M_map_number_d = M_map_number_q;
+    M_current_pos_d = M_current_pos_q;
+    M_alu_answer_d = M_alu_answer_q;
+    M_reg_led_d = M_reg_led_q;
+    M_answer_player_d = M_answer_player_q;
     M_current_map_d = M_current_map_q;
+    M_current_step_d = M_current_step_q;
     
     M_reset_cond_in = ~rst_n;
     rst = M_reset_cond_out;
@@ -98,15 +233,52 @@ module mojo_top_0 (
     M_rng_seed = M_seed_q;
     M_rng_next = 1'h0;
     M_rng_rst = rst;
-    io_led[8+0+7-:8] = M_num_q[8+7-:8];
-    io_led[0+0+7-:8] = M_num_q[0+7-:8];
-    io_led[0+0+0-:1] = M_current_map_q;
+    M_alu_firstNumber = 16'h0000;
+    M_alu_secondNumber = 16'h0000;
+    M_alu_alufn = 6'h00;
+    M_check_player_module_answer_player = 1'h0;
+    M_check_player_module_player = 1'h0;
+    M_check_step_module_lrud_answer = 1'h0;
+    M_check_step_module_lrud_player = 1'h0;
+    M_answer_key_module_current_map = 16'h0000;
+    M_answer_key_module_current_step = 4'h0;
+    M_button_module_button = 3'h0;
+    M_move_current_pos = 4'h0;
+    M_convert_to_alu_lrud = 2'h0;
+    M_led_module_reg_led = M_reg_led_q;
+    led0 = M_led_module_led0;
+    led1 = M_led_module_led1;
+    led2 = M_led_module_led2;
+    led3 = M_led_module_led3;
+    led4 = M_led_module_led4;
+    led5 = M_led_module_led5;
+    led6 = M_led_module_led6;
+    led7 = M_led_module_led7;
+    led8 = M_led_module_led8;
+    led9 = M_led_module_led9;
+    led10 = M_led_module_led10;
+    led11 = M_led_module_led11;
+    led12 = M_led_module_led12;
+    led13 = M_led_module_led13;
+    led14 = M_led_module_led14;
+    led15 = M_led_module_led15;
+    io_led[0+0+0-:1] = M_map_number_q;
+    io_led[0+1+4-:5] = M_current_pos_q;
+    io_led[0+6+1-:2] = M_current_step_q;
+    io_led[8+0+2-:3] = M_step_number_q;
+    io_led[8+7-:8] = M_alu_answer_q[8+7-:8];
+    io_led[0+7-:8] = M_alu_answer_q[0+7-:8];
     if (io_dip[16+7+0-:1]) begin
       M_edge_detector_in = M_ctr_value;
     end
     
     case (M_state_q)
       START_state: begin
+        M_map_0_d = 12'h057;
+        M_map_1_d = 12'hf02;
+        M_answer_player_d = 1'h0;
+        M_reg_led_d = 17'h00000;
+        M_step_number_d = 3'h0;
         io_led[16+7+0-:1] = 1'h1;
         if (io_dip[16+7+0-:1] & M_edge_detector_out) begin
           M_state_d = SET_MAP_state;
@@ -115,17 +287,80 @@ module mojo_top_0 (
       SET_MAP_state: begin
         io_led[16+6+0-:1] = 1'h1;
         M_rng_next = 1'h1;
-        M_num_d = M_rng_num;
-        M_current_map_d = M_rng_num[0+0-:1];
+        M_map_number_d = M_rng_num[0+0-:1];
+        if (M_rng_num[0+0-:1] == 1'h0) begin
+          M_current_map_d = M_map_0_q;
+        end
+        if (M_rng_num[0+0-:1] == 1'h1) begin
+          M_current_map_d = M_map_1_q;
+        end
         if (M_edge_detector_out) begin
-          M_state_d = START_state;
+          M_state_d = SET_START_state;
         end
       end
       SET_START_state: begin
-        led = 1'h1;
+        io_led[16+5+0-:1] = 1'h1;
+        M_current_pos_d = M_current_map_q[8+3-:4];
+        M_move_current_pos = M_current_pos_q;
+        M_reg_led_d = M_move_reg_led;
+        if (M_edge_detector_out) begin
+          M_state_d = SET_STEP_state;
+        end
       end
       SET_STEP_state: begin
-        led = 1'h1;
+        io_led[16+4+0-:1] = 1'h1;
+        if (M_step_number_q == 1'h0) begin
+          M_current_step_d = M_current_map_q[6+1-:2];
+          if (M_edge_detector_out & M_current_step_q == M_current_map_q[6+1-:2]) begin
+            M_step_number_d = M_step_number_q + 1'h1;
+            M_state_d = COMPUTE_STEP_state;
+          end
+        end else begin
+          if (M_step_number_q == 1'h1) begin
+            M_current_step_d = M_current_map_q[4+1-:2];
+            if (M_edge_detector_out & M_current_step_q == M_current_map_q[4+1-:2]) begin
+              M_step_number_d = M_step_number_q + 1'h1;
+              M_state_d = COMPUTE_STEP_state;
+            end
+          end else begin
+            if (M_step_number_q == 2'h2) begin
+              M_current_step_d = M_current_map_q[2+1-:2];
+              if (M_edge_detector_out & M_current_step_q == M_current_map_q[2+1-:2]) begin
+                M_step_number_d = M_step_number_q + 1'h1;
+                M_state_d = COMPUTE_STEP_state;
+              end
+            end else begin
+              if (M_step_number_q == 2'h3) begin
+                M_current_step_d = M_current_map_q[0+1-:2];
+                if (M_edge_detector_out & M_current_step_q == M_current_map_q[0+1-:2]) begin
+                  M_step_number_d = M_step_number_q + 1'h1;
+                  M_state_d = COMPUTE_STEP_state;
+                end
+              end
+            end
+          end
+        end
+      end
+      COMPUTE_STEP_state: begin
+        io_led[16+3+0-:1] = 1'h1;
+        M_convert_to_alu_lrud = M_current_step_q;
+        M_alu_firstNumber = M_current_pos_q;
+        M_alu_secondNumber = M_convert_to_alu_value;
+        M_alu_alufn = M_convert_to_alu_alufn;
+        M_current_pos_d = M_alu_answer[0+3-:4];
+        M_alu_answer_d = M_alu_answer;
+        M_state_d = OUTPUT_STEP_state;
+      end
+      OUTPUT_STEP_state: begin
+        M_move_current_pos = M_current_pos_q;
+        M_reg_led_d = M_move_reg_led;
+        if (M_edge_detector_out & M_step_number_q == 3'h4) begin
+          M_state_d = START_state;
+        end else begin
+          if (M_edge_detector_out) begin
+            M_state_d = SET_STEP_state;
+          end
+        end
       end
       IDLE_state: begin
         led = 1'h1;
@@ -149,24 +384,28 @@ module mojo_top_0 (
     if (rst == 1'b1) begin
       M_current_map_q <= 1'h0;
       M_current_step_q <= 1'h0;
+      M_map_number_q <= 1'h0;
+      M_step_number_q <= 1'h0;
       M_map_0_q <= 1'h0;
       M_map_1_q <= 1'h0;
       M_reg_led_q <= 1'h0;
       M_answer_player_q <= 1'h0;
       M_current_pos_q <= 1'h0;
-      M_num_q <= 1'h0;
       M_seed_q <= 1'h0;
+      M_alu_answer_q <= 1'h0;
       M_state_q <= 1'h0;
     end else begin
       M_current_map_q <= M_current_map_d;
       M_current_step_q <= M_current_step_d;
+      M_map_number_q <= M_map_number_d;
+      M_step_number_q <= M_step_number_d;
       M_map_0_q <= M_map_0_d;
       M_map_1_q <= M_map_1_d;
       M_reg_led_q <= M_reg_led_d;
       M_answer_player_q <= M_answer_player_d;
       M_current_pos_q <= M_current_pos_d;
-      M_num_q <= M_num_d;
       M_seed_q <= M_seed_d;
+      M_alu_answer_q <= M_alu_answer_d;
       M_state_q <= M_state_d;
     end
   end

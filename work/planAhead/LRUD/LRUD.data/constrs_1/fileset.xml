@@ -10,18 +10,18 @@
         <Attr Name="UsedInImplementation" Val="1"/>
       </FileInfo>
     </File>
-    <File Path="$PSRCDIR/constrs_1/imports/Alchitry-labs/library/components/mojo.ucf">
+    <File Path="$PSRCDIR/constrs_1/imports/Alchitry-labs/Workspace/LRUD/constraint/custom.ucf">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../../../../../library/components/mojo.ucf"/>
-        <Attr Name="ImportTime" Val="1569310768"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../constraint/custom.ucf"/>
+        <Attr Name="ImportTime" Val="1573897067"/>
         <Attr Name="UsedInSynthesis" Val="1"/>
         <Attr Name="UsedInImplementation" Val="1"/>
       </FileInfo>
     </File>
-    <File Path="$PSRCDIR/constrs_1/imports/Alchitry-labs/Workspace/LRUD/constraint/custom.ucf">
+    <File Path="$PSRCDIR/constrs_1/imports/Alchitry-labs/library/components/mojo.ucf">
       <FileInfo>
-        <Attr Name="ImportPath" Val="$PPRDIR/../../../constraint/custom.ucf"/>
-        <Attr Name="ImportTime" Val="1573810543"/>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../../../library/components/mojo.ucf"/>
+        <Attr Name="ImportTime" Val="1569310768"/>
         <Attr Name="UsedInSynthesis" Val="1"/>
         <Attr Name="UsedInImplementation" Val="1"/>
       </FileInfo>
