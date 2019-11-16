@@ -17,40 +17,40 @@ module button_module (
     if(button0 == b1){
       player = b0;
       lrud = b00;
-  }
-  else if(button1 == b1){
-      player = b0;
-      lrud = b01;
-  }
-  
-  else if(button2 == b1){
-      player = b0;
-      lrud = b10;
-  }
-  
-  else if(button3 == b1){
-      player = b0;
-      lrud = b11;
-  }
+    }
+    else if(button1 == b1){
+        player = b0;
+        lrud = b01;
+    }
     
-  else if(button4 == b1){
-      player = b1;
-      lrud = b00;
-  }
+    else if(button2 == b1){
+        player = b0;
+        lrud = b10;
+    }
+    
+    else if(button3 == b1){
+        player = b0;
+        lrud = b11;
+    }
       
-  else if(button5 == b1){
-      player = b1;
-      lrud = b01;
-  }
-  
-  else if(button6 == b1){
-      player = b1;
-      lrud = b10;
-  }
-  
-  else if(button7 == b1){
-      player = b1;
-      lrud = b11;
-  }
+    else if(button4 == b1){
+        player = b1;
+        lrud = b00;
+    }
+        
+    else if(button5 == b1){
+        player = b1;
+        lrud = b01;
+    }
+    
+    else if(button6 == b1){
+        player = b1;
+        lrud = b10;
+    }
+    
+    else if(button7 == b1){
+        player = b1;
+        lrud = b11;
+    }
           
 }

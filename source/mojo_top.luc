@@ -31,7 +31,15 @@ module mojo_top (
     output led12,           // Output led 12
     output led13,           // Output led 13
     output led14,           // Output led 14
-    output led15            // Output led 15
+    output led15,           // Output led 15
+    input p1_left,
+    input p1_right,
+    input p1_up,
+    input p1_down,
+    input p2_left,
+    input p2_right,
+    input p2_up,
+    input p2_down
   ) {
   
   sig rst;                                    // reset signal
@@ -100,14 +108,20 @@ module mojo_top (
     answer_key_module.current_map = 16x{0}; //input zero first
     answer_key_module.current_step = 4x{0}; //input zero first
     
-    button_module.button = 3x{0};           //input zero first
-    
     move.current_pos = 4x{0};               //input zero first
     
     convert_to_alu.lrud = b00;              //input zero first
     
     led_module.reg_led = reg_led.q;         //connect reg led to led module
     
+    button_module.button0 = p1_left;
+    button_module.button1 = p1_right;
+    button_module.button2 = p1_up;
+    button_module.button3 = p1_down;
+    button_module.button4 = p2_left;
+    button_module.button5 = p2_right;
+    button_module.button6 = p2_up;
+    button_module.button7 = p2_down;    
     
     //connect led module output to actual output
     led0 = led_module.led0;
@@ -232,31 +246,70 @@ module mojo_top (
         state.d = state.OUTPUT_STEP;
       
       state.OUTPUT_STEP:
+        io_led[2][2] = 1;
         //convert current step to reg_led
         move.current_pos = current_pos.q;
         //update reg led with move output
         reg_led.d = move.reg_led;
         if(edge_detector.out & step_number.q == 4){
-          state.d = state.START;
+          // Re-initialize the step number and the current pos
+          step_number.d = 0;
+          current_pos.d = current_map.q[11:8];
+          state.d = state.IDLE;
         }
         else if(edge_detector.out){
           state.d = state.SET_STEP;
         }
       
       state.IDLE:
-        led = 1;
+        io_led[2][1] = 1;
+        if(step_number.q == 0){
+          current_step.d = current_map.q[7:6];
+        }
+        else if(step_number.q == 1){
+          current_step.d = current_map.q[5:4];
+        }
+        else if(step_number.q == 2){
+          current_step.d = current_map.q[3:2];
+        }
+        else if(step_number.q == 3){
+          current_step.d = current_map.q[1:0];
+        }
+        if(p1_left == 1 | p1_right == 1 | p1_up == 1 | p1_down == 1 | p2_left == 1 | p2_right == 1 | p2_up == 1 | p2_down == 1){
+          state.d = state.CHECK_PLAYER;
+        }
         
       state.CHECK_PLAYER:
-        led = 1;
+        io_led[2][0] = 1;
+        if(button_module.player == answer_player.q){
+          answer_player.d = 1 - answer_player.q;
+          state.d = state.CHECK_STEP;
+        }
+        else{
+          state.d = state.ERROR;
+        }
         
       state.CHECK_STEP:
-        led = 1;
+        if(button_module.lrud == current_step.q){
+          if(current_step.q == 3){
+            state.d = state.WIN;
+          }
+          else{
+            step_number.d = step_number.q + 1;
+            state.d = state.IDLE;
+          }
+        }
+        else{
+          state.d = state.ERROR;
+        }
         
       state.WIN:
-        led = 1;
+        //on alternate led
+        reg_led.d = b1010101010101010;
         
       state.ERROR:
-        led = 1;
+        //on all led
+        reg_led.d = b1111111111111111;
     }
   }
 }
