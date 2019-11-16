@@ -1,5 +1,12 @@
 module button_module (
-    input button[3],
+    input button0,
+    input button1,
+    input button2,
+    input button3,
+    input button4,
+    input button5,
+    input button6,
+    input button7,
     output player,
     output lrud[2]
   ) {
@@ -7,41 +14,41 @@ module button_module (
   always {
     player = hx;
     lrud = hx;
-    if(button == b000){
+    if(button0 == b1){
       player = b0;
       lrud = b00;
   }
-  else if(button == b001){
+  else if(button1 == b1){
       player = b0;
       lrud = b01;
   }
   
-  else if(button == b010){
+  else if(button2 == b1){
       player = b0;
       lrud = b10;
   }
   
-  else if(button == b011){
+  else if(button3 == b1){
       player = b0;
       lrud = b11;
   }
     
-  else if(button == b100){
+  else if(button4 == b1){
       player = b1;
       lrud = b00;
   }
       
-  else if(button == b101){
+  else if(button5 == b1){
       player = b1;
       lrud = b01;
   }
   
-  else if(button == b110){
+  else if(button6 == b1){
       player = b1;
       lrud = b10;
   }
   
-  else if(button == b111){
+  else if(button7 == b1){
       player = b1;
       lrud = b11;
   }
