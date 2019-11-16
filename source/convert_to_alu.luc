@@ -1,5 +1,5 @@
 module convert_to_alu (
-    input lrud,
+    input lrud[2],
     output alufn[6],
     output value[16]
   ) {

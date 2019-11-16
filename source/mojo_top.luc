@@ -10,12 +10,28 @@ module mojo_top (
     output spi_channel [4], // AVR general purpose pins (used by default to select ADC channel)
     input avr_tx,           // AVR TX (FPGA RX)
     output avr_rx,          // AVR RX (FPGA TX)
-    input avr_rx_busy,       // AVR RX buffer full
+    input avr_rx_busy,      // AVR RX buffer full
     output io_led [3][8],   // LEDs on IO Shield
     output io_seg [8],      // 7-segment LEDs on IO Shield
     output io_sel [4],      // Digit select on IO Shield
     input io_button [5],    // 5 buttons on IO Shield
-    input io_dip [3][8]     // DIP switches on IO Shield
+    input io_dip [3][8],    // DIP switches on IO Shield
+    output led0,            // Output led 0
+    output led1,            // Output led 1
+    output led2,            // Output led 2
+    output led3,            // Output led 3
+    output led4,            // Output led 4
+    output led5,            // Output led 5
+    output led6,            // Output led 6
+    output led7,            // Output led 7
+    output led8,            // Output led 8
+    output led9,            // Output led 9
+    output led10,           // Output led 10
+    output led11,           // Output led 11
+    output led12,           // Output led 12
+    output led13,           // Output led 13
+    output led14,           // Output led 14
+    output led15            // Output led 15
   ) {
   
   sig rst;                                    // reset signal
@@ -25,7 +41,7 @@ module mojo_top (
   check_step_module check_step_module;        // check whether step is correct
   answer_key_module answer_key_module;        // reads the answer key and outputs LRUD
   button_module button_module;                // reads which button is from which player and its LRUD
-  //convert_to_alu convert_to_alu;              // reads LRUD and outputs the alufn and 16bit input into alu
+  convert_to_alu convert_to_alu;              // reads LRUD and outputs the alufn and 16bit input into alu
   move move;                                  // changes value of led register to 1 and all other led register to 0 (input: address of register)
   
   
@@ -35,8 +51,10 @@ module mojo_top (
     reset_conditioner reset_cond;
     edge_detector edge_detector (#RISE(1), #FALL(0)); //initialize edge_detector to detect edges
     .rst(rst) {
-      dff current_map;
+      dff current_map[12];
       dff current_step[2];
+      dff map_number;
+      dff step_number[2];
       dff map_0[12];
       dff map_1[12];
       dff reg_led[16];
@@ -72,8 +90,6 @@ module mojo_top (
     alu.secondNumber = 16x{0}; // input zero first
     alu.alufn = 6x{0};         // input zero first
     
-    led_module.reg_led = 16x{0}; //input zero first
-    
     check_player_module.answer_player = 0;  //input zero first
     check_player_module.player = 0;         //input zero first
     
@@ -87,9 +103,39 @@ module mojo_top (
     
     move.current_pos = 4x{0};               //input zero first
     
+    convert_to_alu.lrud = b00;              //input zero first
+    
+    //00 is left, 01 is right, 10 is up, 11 is down
+    map_0.d = b000001010111; //start at led0 then [right,right,right,down]
+    map_1.d = b111100000010; //start at led15 then [left,left,left,up]
+    answer_player.d = 0;     //initialize starting player to answer to be player 1
+    reg_led.d = 16x{0};      //initialize all led reg to be 0
+    step_number.d = b00;     //initialize step number to be 0
+    seed.d = 32x{0};         //initialize seed number to be 0
+    
+    led_module.reg_led = reg_led.q;         //connect reg led to led module
+    
+    //connect led module output to actual output
+    led0 = led_module.led0;
+    led1 = led_module.led1;
+    led2 = led_module.led2;
+    led3 = led_module.led3;
+    led4 = led_module.led4;
+    led5 = led_module.led5;
+    led6 = led_module.led6;
+    led7 = led_module.led7;
+    led8 = led_module.led8;
+    led9 = led_module.led9;
+    led10 = led_module.led10;
+    led11 = led_module.led11;
+    led12 = led_module.led12;
+    led13 = led_module.led13;
+    led14 = led_module.led14;
+    led15 = led_module.led15;
+    
     //io_led[1][7:0] = num.q[15:8];
     //io_led[0][7:0] = num.q[7:0];
-    io_led[0][0] = current_map.q;
+    io_led[0][0] = map_number.q;
     
     if(io_dip[2][7]){
       edge_detector.in = ctr.value;      // Input value of counter into edge detector
@@ -105,13 +151,22 @@ module mojo_top (
       state.SET_MAP:
         io_led[2][6] = 1;
         rng.next = 1;
-        current_map.d = rng.num[0];
+        map_number.d = rng.num[0];
         if(edge_detector.out){
-          state.d = state.START;
+          state.d = state.SET_START;
         }
 
       state.SET_START:
-        led = 1;
+        io_led[2][5] = 1;
+        if(map_number.q == 0){
+          current_pos.d = map_0.q[11:8];
+        }
+        else if(map_number.q == 1){
+          current_pos.d = map_1.q[11:8];
+        }
+        if(edge_detector.out){
+          state.d = state.START;
+        }
         
       state.SET_STEP:
         led = 1;
