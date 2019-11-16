@@ -1,6 +1,4 @@
 module led_module(
-    input clk,  // clock
-    input rst,  // reset
     output led0,
     output led1,
     output led2,

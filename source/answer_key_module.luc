@@ -1,6 +1,4 @@
 module answer_key_module (
-    input clk,  // clock
-    input rst,  // reset
     input current_step[2],
     input current_map[16],
     output lrud[2]

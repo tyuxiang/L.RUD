@@ -9,7 +9,6 @@ module check_step_module (
     alu.firstNumber = lrud_player;
     alu.secondNumber = lrud_answer;
     alu.alufn = b100100;
-    out = alu.answer;
-    
+    out = alu.answer[0];
   }
 }

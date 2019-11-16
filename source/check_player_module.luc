@@ -1,6 +1,4 @@
 module check_player_module (
-    input clk,  // clock
-    input rst,  // reset
     output check_player,
     input answer_player,
     input player
@@ -11,6 +9,6 @@ module check_player_module (
     alu.firstNumber=player;
     alu.secondNumber=answer_player;
     alu.alufn=b110011;
-    check_player=alu.answer;
+    check_player=alu.answer[0];
   }
 }
