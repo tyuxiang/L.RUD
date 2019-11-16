@@ -1,10 +1,28 @@
 module convert_to_alu (
-    input clk,  // clock
-    input rst,  // reset
-    output out
+    input lrud,
+    output alufn[6],
+    output value[16]
   ) {
 
   always {
-    out = 0;
+    alufn = c{hx,hx,hx,hx,hx,hx};
+    value = c{hx,hx,hx,hx,hx,hx,hx,hx,hx,hx,hx,hx,hx,hx,hx,hx};
+    
+    if(lrud == b00){
+      alufn = b000001;
+      value = b0000000000000001;
+    }
+    else if(lrud == b01){
+      alufn = b000000;
+      value = b0000000000000001;
+    }
+    else if(lrud == b10){
+      alufn = b000001;
+      value = b0000000000000100;
+    }
+    else if(lrud == b11){
+      alufn = b000000;
+      value = b0000000000000100;
+    }
   }
 }
