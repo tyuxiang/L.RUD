@@ -12,10 +12,10 @@ module mojo_top (
     output avr_rx,          // AVR RX (FPGA TX)
     input avr_rx_busy,      // AVR RX buffer full
     output io_led [3][8],   // LEDs on IO Shield
-    output io_seg [8],      // 7-segment LEDs on IO Shield
-    output io_sel [4],      // Digit select on IO Shield
+    //output io_seg [8],      // 7-segment LEDs on IO Shield
+    //output io_sel [4],      // Digit select on IO Shield
     input io_button [5],    // 5 buttons on IO Shield
-    input io_dip [3][8],    // DIP switches on IO Shield
+    input io_dip[3][8],    // DIP switches on IO Shield
     output led0,            // Output led 0
     output led1,            // Output led 1
     output led2,            // Output led 2
@@ -31,7 +31,8 @@ module mojo_top (
     output led12,           // Output led 12
     output led13,           // Output led 13
     output led14,           // Output led 14
-    output led15,           // Output led 15
+    output led15           // Output led 15
+    /*
     input p1_left,
     input p1_right,
     input p1_up,
@@ -40,6 +41,7 @@ module mojo_top (
     input p2_right,
     input p2_up,
     input p2_down
+    */
   ) {
   
   sig rst;                                    // reset signal
@@ -70,7 +72,7 @@ module mojo_top (
       dff current_pos[4];
       dff seed [32];                      // seed for each run
       dff alu_answer[16];
-      fsm state = {START, SET_MAP, SET_START, SET_STEP, COMPUTE_STEP, OUTPUT_STEP, DISPLAY_STEP, IDLE, CHECK_PLAYER, CHECK_STEP, WIN, ERROR};
+      fsm state = {START, SET_MAP, SET_START, SET_STEP, COMPUTE_STEP, OUTPUT_STEP, DISPLAY_STEP, IDLE, CHECK_PLAYER, CHECK_STEP, WAIT, WIN, ERROR};
       counter ctr (#SIZE(1), #DIV(24));   // Initialize counter to count every 2^25(~33.5 million) clock cycle, on MOJO is 50 million clock cycle per reset_cond
       
     }
@@ -88,8 +90,8 @@ module mojo_top (
     edge_detector.in = bz; // Have 0 output from edge_detector
     
     io_led = 3x{{8h00}};    // turn LEDs off
-    io_seg = 8hff;          // turn segments off
-    io_sel = 4hf;           // select no digits
+    //io_seg = 8hff;          // turn segments off
+    //io_sel = 4hf;           // select no digits
     
     rng.seed = seed.q;      // use seed.q as the seed
     rng.next = 0;           // don't generate new numbers
@@ -102,8 +104,8 @@ module mojo_top (
     check_player_module.answer_player = 0;  //input zero first
     check_player_module.player = 0;         //input zero first
     
-    check_step_module.lrud_answer = 0;      //input zero first
-    check_step_module.lrud_player = 0;      //input zero first
+    check_step_module.lrud_answer = 00;      //input zero first
+    check_step_module.lrud_player = 00;      //input zero first
     
     answer_key_module.current_map = 16x{0}; //input zero first
     answer_key_module.current_step = 4x{0}; //input zero first
@@ -114,6 +116,7 @@ module mojo_top (
     
     led_module.reg_led = reg_led.q;         //connect reg led to led module
     
+    /*
     button_module.button0 = p1_left;
     button_module.button1 = p1_right;
     button_module.button2 = p1_up;
@@ -121,7 +124,17 @@ module mojo_top (
     button_module.button4 = p2_left;
     button_module.button5 = p2_right;
     button_module.button6 = p2_up;
-    button_module.button7 = p2_down;    
+    button_module.button7 = p2_down; 
+    */
+    
+    button_module.button0 = io_button[0];
+    button_module.button1 = io_button[1];
+    button_module.button2 = 0;
+    button_module.button3 = io_button[3];
+    button_module.button4 = 0;  
+    button_module.button5 = io_button[4];
+    button_module.button6 = 0;
+    button_module.button7 = io_button[2];
     
     //connect led module output to actual output
     led0 = led_module.led0;
@@ -149,8 +162,13 @@ module mojo_top (
     io_led[1][2:0] = step_number.q;
     //io_led[1] = reg_led.q[15:8];
     //io_led[0] = reg_led.q[7:0];
-    io_led[1] = alu_answer.q[15:8];
-    io_led[0] = alu_answer.q[7:0];
+    //io_led[1] = alu_answer.q[15:8];
+    //io_led[0] = alu_answer.q[7:0];
+    io_led[2][0] = io_button[0];
+    io_led[2][1] = io_button[1];
+    io_led[2][2] = io_button[2];
+    io_led[2][3] = io_button[3];
+    io_led[2][4] = io_button[4];
     
     if(io_dip[2][7]){
       edge_detector.in = ctr.value;      // Input value of counter into edge detector
@@ -263,6 +281,7 @@ module mojo_top (
       
       state.IDLE:
         io_led[2][1] = 1;
+        
         if(step_number.q == 0){
           current_step.d = current_map.q[7:6];
         }
@@ -275,13 +294,21 @@ module mojo_top (
         else if(step_number.q == 3){
           current_step.d = current_map.q[1:0];
         }
+        /*
         if(p1_left == 1 | p1_right == 1 | p1_up == 1 | p1_down == 1 | p2_left == 1 | p2_right == 1 | p2_up == 1 | p2_down == 1){
+          state.d = state.CHECK_PLAYER;
+        }*/
+        
+        if(io_button[0] == 1 | io_button[1] == 1 | io_button[2] == 1 | io_button[3] == 1 | io_button[4] == 1){
           state.d = state.CHECK_PLAYER;
         }
         
       state.CHECK_PLAYER:
         io_led[2][0] = 1;
-        if(button_module.player == answer_player.q){
+        
+        check_player_module.answer_player = answer_player.q;
+        check_player_module.player = button_module.player;
+        if(check_player_module.check_player == 1){
           answer_player.d = 1 - answer_player.q;
           state.d = state.CHECK_STEP;
         }
@@ -290,17 +317,24 @@ module mojo_top (
         }
         
       state.CHECK_STEP:
-        if(button_module.lrud == current_step.q){
+        check_step_module.lrud_player = button_module.lrud;
+        check_step_module.lrud_answer = current_step.q;
+        if(check_step_module.out == 1){
           if(current_step.q == 3){
             state.d = state.WIN;
           }
           else{
             step_number.d = step_number.q + 1;
-            state.d = state.IDLE;
+            state.d = state.WAIT;
           }
         }
         else{
           state.d = state.ERROR;
+        }
+        
+      state.WAIT:
+        if(io_button[0] == 0 & io_button[1] == 0 & io_button[2] == 0 & io_button[3] == 0 & io_button[4] == 0){
+          state.d = state.IDLE;
         }
         
       state.WIN:
