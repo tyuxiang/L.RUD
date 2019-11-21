@@ -1,6 +1,6 @@
 module check_step_module (
-    input lrud_player,
-    input lrud_answer,
+    input lrud_player[2],
+    input lrud_answer[2],
     output out
   ) {
   new_alu alu;
@@ -8,7 +8,7 @@ module check_step_module (
     out = hx;
     alu.firstNumber = lrud_player;
     alu.secondNumber = lrud_answer;
-    alu.alufn = b100100;
+    alu.alufn = b110011;
     out = alu.answer[0];
   }
 }

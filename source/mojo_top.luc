@@ -60,6 +60,7 @@ module mojo_top (
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
     edge_detector edge_detector (#RISE(1), #FALL(0)); //initialize edge_detector to detect edges
+    counter ctr (#SIZE(8), #DIV(24));   // Initialize counter to count every 2^25(~33.5 million) clock cycle, on MOJO is 50 million clock cycle per reset_cond
     .rst(rst) {
       dff current_map[12];
       dff current_step[2];
@@ -71,9 +72,15 @@ module mojo_top (
       dff answer_player;
       dff current_pos[4];
       dff seed [32];                      // seed for each run
-      dff alu_answer[16];
-      fsm state = {START, SET_MAP, SET_START, SET_STEP, COMPUTE_STEP, OUTPUT_STEP, DISPLAY_STEP, IDLE, CHECK_PLAYER, CHECK_STEP, WAIT, WIN, ERROR};
-      counter ctr (#SIZE(1), #DIV(24));   // Initialize counter to count every 2^25(~33.5 million) clock cycle, on MOJO is 50 million clock cycle per reset_cond
+      dff answer;
+      dff answer_step;
+      dff output_player;
+      dff output_lrud[2];
+      dff checking;
+      dff timer[2];
+      fsm state = {START, SET_MAP, SET_START, SET_STEP, COMPUTE_STEP, OUTPUT_STEP, DISPLAY_STEP, IDLE, COMPUTE_PLAYER, CHECK_PLAYER
+                  , COMPUTE_LRUD, CHECK_STEP, WAIT, WIN, ERROR};
+      //counter ctr (#SIZE(1), #DIV(24));   // Initialize counter to count every 2^25(~33.5 million) clock cycle, on MOJO is 50 million clock cycle per reset_cond
       
     }
     pn_gen rng;
@@ -88,6 +95,8 @@ module mojo_top (
     spi_channel = bzzzz;    // not using flags
     avr_rx = bz;            // not using serial port
     edge_detector.in = bz; // Have 0 output from edge_detector
+    
+    ctr.rst = rst;
     
     io_led = 3x{{8h00}};    // turn LEDs off
     //io_seg = 8hff;          // turn segments off
@@ -130,7 +139,7 @@ module mojo_top (
     button_module.button0 = io_button[0];
     button_module.button1 = io_button[1];
     button_module.button2 = 0;
-    button_module.button3 = io_button[3];
+    button_module.button3 = 0;
     button_module.button4 = 0;  
     button_module.button5 = io_button[4];
     button_module.button6 = 0;
@@ -170,6 +179,9 @@ module mojo_top (
     io_led[2][3] = io_button[3];
     io_led[2][4] = io_button[4];
     
+    map_0.d = b000001010111; //start at led0 then [right,right,right,down]
+    map_1.d = b111100000010; //start at led15 then [left,left,left,up]
+    
     if(io_dip[2][7]){
       edge_detector.in = ctr.value;      // Input value of counter into edge detector
     }
@@ -177,12 +189,14 @@ module mojo_top (
     case (state.q) {
       state.START:
         //00 is left, 01 is right, 10 is up, 11 is down
-        map_0.d = b000001010111; //start at led0 then [right,right,right,down]
-        map_1.d = b111100000010; //start at led15 then [left,left,left,up]
         answer_player.d = 0;     //initialize starting player to answer to be player 1
         reg_led.d = b00000000000000000;      //initialize all led reg to be 0
         step_number.d = b000;     //initialize step number to be 0
         io_led[2][7] = 1;
+        checking.d = 0;
+        current_pos.d = 0000;
+        current_map.d = b000000000000;
+        
         if(io_dip[2][7] & edge_detector.out){
           state.d = state.SET_MAP;
         }
@@ -260,7 +274,6 @@ module mojo_top (
         alu.alufn = convert_to_alu.alufn;
         //update the new current pos
         current_pos.d = alu.answer[3:0];
-        alu_answer.d = alu.answer;
         state.d = state.OUTPUT_STEP;
       
       state.OUTPUT_STEP:
@@ -269,8 +282,13 @@ module mojo_top (
         move.current_pos = current_pos.q;
         //update reg led with move output
         reg_led.d = move.reg_led;
-        if(edge_detector.out & step_number.q == 4){
+        if(checking.q == 1){
+          ctr.rst = 1;
+          state.d = state.IDLE;
+        }
+        else if(edge_detector.out & step_number.q == 4){
           // Re-initialize the step number and the current pos
+          ctr.rst = 1;
           step_number.d = 0;
           current_pos.d = current_map.q[11:8];
           state.d = state.IDLE;
@@ -281,6 +299,17 @@ module mojo_top (
       
       state.IDLE:
         io_led[2][1] = 1;
+        io_led[1][7:0] = ctr.value;
+        
+        checking.d = 1;
+        //convert current step to reg_led
+        move.current_pos = current_pos.q;
+        //update reg led with move output
+        reg_led.d = move.reg_led;
+        
+        if(ctr.value == 30){  //this is ard 10sec
+          state.d = state.ERROR;
+        }
         
         if(step_number.q == 0){
           current_step.d = current_map.q[7:6];
@@ -300,26 +329,39 @@ module mojo_top (
         }*/
         
         if(io_button[0] == 1 | io_button[1] == 1 | io_button[2] == 1 | io_button[3] == 1 | io_button[4] == 1){
-          state.d = state.CHECK_PLAYER;
+          output_player.d = button_module.player;
+          output_lrud.d = button_module.lrud;
+          state.d = state.COMPUTE_PLAYER;
         }
+        
+      state.COMPUTE_PLAYER:
+        check_player_module.answer_player = answer_player.q;
+        check_player_module.player = output_player.q;
+        answer.d = check_player_module.check_player;
+        state.d = state.CHECK_PLAYER;
         
       state.CHECK_PLAYER:
         io_led[2][0] = 1;
-        
-        check_player_module.answer_player = answer_player.q;
-        check_player_module.player = button_module.player;
-        if(check_player_module.check_player == 1){
+        io_led[1][0] = answer.q;
+        if(answer.q == 1){
           answer_player.d = 1 - answer_player.q;
-          state.d = state.CHECK_STEP;
+          state.d = state.COMPUTE_LRUD;
         }
         else{
           state.d = state.ERROR;
         }
+      
+        
+      state.COMPUTE_LRUD:
+        check_step_module.lrud_player = output_lrud.q;
+        check_step_module.lrud_answer = current_step.q;
+        answer_step.d = check_step_module.out;
+        state.d = state.CHECK_STEP;
         
       state.CHECK_STEP:
-        check_step_module.lrud_player = button_module.lrud;
-        check_step_module.lrud_answer = current_step.q;
-        if(check_step_module.out == 1){
+        io_led[2][1] = 1;
+        
+        if(answer_step.q == 1){
           if(current_step.q == 3){
             state.d = state.WIN;
           }
@@ -331,19 +373,26 @@ module mojo_top (
         else{
           state.d = state.ERROR;
         }
+      
         
       state.WAIT:
         if(io_button[0] == 0 & io_button[1] == 0 & io_button[2] == 0 & io_button[3] == 0 & io_button[4] == 0){
-          state.d = state.IDLE;
+          state.d = state.COMPUTE_STEP;
         }
         
       state.WIN:
         //on alternate led
         reg_led.d = b1010101010101010;
+        if(io_button[3]){
+          state.d = state.START;
+        }
         
       state.ERROR:
         //on all led
         reg_led.d = b1111111111111111;
+        if(io_button[3]){
+          state.d = state.START;
+        }
     }
   }
 }
