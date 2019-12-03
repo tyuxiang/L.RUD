@@ -12,338 +12,535 @@ module mojo_top (
     output avr_rx,          // AVR RX (FPGA TX)
     input avr_rx_busy,      // AVR RX buffer full
     output io_led [3][8],   // LEDs on IO Shield
-    //output io_seg [8],      // 7-segment LEDs on IO Shield
-    //output io_sel [4],      // Digit select on IO Shield
+    //output io_seg [8],    // 7-segment LEDs on IO Shield
+    //output io_sel [4],    // Digit select on IO Shield
     input io_button [5],    // 5 buttons on IO Shield
-    input io_dip[3][8],    // DIP switches on IO Shield
-    output led0,            // Output led 0
-    output led1,            // Output led 1
-    output led2,            // Output led 2
-    output led3,            // Output led 3
-    output led4,            // Output led 4
-    output led5,            // Output led 5
-    output led6,            // Output led 6
-    output led7,            // Output led 7
-    output led8,            // Output led 8
-    output led9,            // Output led 9
-    output led10,           // Output led 10
-    output led11,           // Output led 11
-    output led12,           // Output led 12
-    output led13,           // Output led 13
-    output led14,           // Output led 14
-    output led15           // Output led 15
-    /*
-    input p1_left,
-    input p1_right,
-    input p1_up,
-    input p1_down,
-    input p2_left,
-    input p2_right,
-    input p2_up,
-    input p2_down
-    */
+    //input io_dip[3][8],   // DIP switches on IO Shield
+    output led_strip_0,     // Output 1st column of led strip
+    output led_strip_1,     // Output 2nd column of led strip
+    output led_strip_2,     // Output 3rd column of led strip
+    output led_strip_3,     // Output 4th column of led strip
+    input p1_left,          // Input player 1 left button 
+    input p1_right,         // Input player 1 right button 
+    input p1_up,            // Input player 1 up button 
+    input p1_down,          // Input player 1 down button 
+    input p2_left,          // Input player 2 left button 
+    input p2_right,         // Input player 2 right button 
+    input p2_up,            // Input player 2 up button 
+    input p2_down,          // Input player 2 down button 
+    input reset_button,     // Input reset button
+    output countdown_3,     // Output of 3rd countdown led
+    output countdown_2,     // Output of 2nd countdown led
+    output countdown_1,     // Output of 1st countdown led
+    output player1_led,     // Output of 1st player led
+    output player2_led      // Output of 2nd player led
   ) {
   
-  sig rst;                                    // reset signal
-  new_alu alu;                                // alu (input: 1st number, 2nd number, alufn) (output:answer based on operation)
-  led_module led_module;                      // displays on the led using the registers (input: LED registers) (output: LED output)
-  check_player_module check_player_module;    // check whether button is from correct player
-  check_step_module check_step_module;        // check whether step is correct
-  answer_key_module answer_key_module;        // reads the answer key and outputs LRUD
-  button_module button_module;                // reads which button is from which player and its LRUD
-  convert_to_alu convert_to_alu;              // reads LRUD and outputs the alufn and 16bit input into alu
-  move move;                                  // changes value of led register to 1 and all other led register to 0 (input: address of register)
-  
+  sig rst;                                    // Reset signal
+  new_alu alu;                                // Alu (input: 1st number, 2nd number, alufn) (output:answer based on operation)
+  check_player_module check_player_module;    // Check whether button is from correct player
+  check_step_module check_step_module;        // Check whether step is correct
+  button_module button_module;                // Reads which button is from which player and its LRUD
+  convert_to_alu convert_to_alu;              // Reads LRUD and outputs the alufn and 16bit input into alu
+  led_module_2 led_module_2;                  // Converts the current position to the bits required to be sent to the led strip
+  compute_countdown compute_countdown;        // Takes in the current timing and display on the timer leds accordingly
   
   .clk(clk) {
     // The reset conditioner is used to synchronize the reset signal to the FPGA
     // clock. This ensures the entire FPGA comes out of reset at the same time.
     reset_conditioner reset_cond;
-    edge_detector edge_detector (#RISE(1), #FALL(0)); //initialize edge_detector to detect edges
+    
+    // Initialize edge_detector to detect edges for buttons and counter
+    edge_detector edge_detector (#RISE(1), #FALL(0));
+    edge_detector edge_detector_button0 (#RISE(1), #FALL(0));
+    edge_detector edge_detector_button1 (#RISE(1), #FALL(0));
+    edge_detector edge_detector_button2 (#RISE(1), #FALL(0));
+    edge_detector edge_detector_button3 (#RISE(1), #FALL(0));
+    edge_detector edge_detector_button4 (#RISE(1), #FALL(0));
+    edge_detector edge_detector_button5 (#RISE(1), #FALL(0));
+    edge_detector edge_detector_button6 (#RISE(1), #FALL(0));
+    edge_detector edge_detector_button7 (#RISE(1), #FALL(0));
+    edge_detector edge_detector_reset (#RISE(1), #FALL(0));
+    
+    // Initialize button conditioner to stabilize button press
+    button_conditioner button_cond_button0;
+    button_conditioner button_cond_button1;
+    button_conditioner button_cond_button2;
+    button_conditioner button_cond_button3;  
+    button_conditioner button_cond_button4;  
+    button_conditioner button_cond_button5;    
+    button_conditioner button_cond_button6;    
+    button_conditioner button_cond_button7;     
+    button_conditioner button_cond_reset;     
+    
+    // Initialize module to display light on the led strip
+    led_ws2812b led_ws2812b_0(#SIZE(4));
+    led_ws2812b led_ws2812b_1(#SIZE(4));
+    led_ws2812b led_ws2812b_2(#SIZE(4));
+    led_ws2812b led_ws2812b_3(#SIZE(4));
+    
+    // Initialize random number generator
+    pn_gen rng;
+    
     counter ctr (#SIZE(8), #DIV(24));   // Initialize counter to count every 2^25(~33.5 million) clock cycle, on MOJO is 50 million clock cycle per reset_cond
     .rst(rst) {
-      dff current_map[12];
-      dff current_step[2];
-      dff map_number;
-      dff step_number[3];
-      dff map_0[12];
-      dff map_1[12];
-      dff reg_led[16];
-      dff answer_player;
-      dff current_pos[4];
-      dff seed [32];                      // seed for each run
-      dff answer;
-      dff answer_step;
-      dff output_player;
-      dff output_lrud[2];
-      dff checking;
-      dff timer[2];
-      fsm state = {START, SET_MAP, SET_START, SET_STEP, COMPUTE_STEP, OUTPUT_STEP, DISPLAY_STEP, IDLE, COMPUTE_PLAYER, CHECK_PLAYER
-                  , COMPUTE_LRUD, CHECK_STEP, WAIT, WIN, ERROR};
-      //counter ctr (#SIZE(1), #DIV(24));   // Initialize counter to count every 2^25(~33.5 million) clock cycle, on MOJO is 50 million clock cycle per reset_cond
+      dff current_map[20];  // Map that is used for the current run
+      dff current_step[2];  // Step(Left/Right/Up/Down) that is used currently
+      dff step_number[5];   // Number of steps taken already
       
+      dff map_0[12];        // Movements of the 0th Map
+      dff map_1[12];        // Movements of the 1st Map
+      dff map_2[12];        // Movements of the 2nd Map
+      dff map_3[12];        // Movements of the 3rd Map
+      
+      dff map_0_lvl1[16];   // Movements of the 0th Map level 1
+      dff map_1_lvl1[16];   // Movements of the 1st Map level 1
+      dff map_2_lvl1[16];   // Movements of the 2nd Map level 1
+      dff map_3_lvl1[16];   // Movements of the 3rd Map level 1
+      
+      dff map_0_lvl2[20];   // Movements of the 0th Map level 2
+      dff map_1_lvl2[20];   // Movements of the 1st Map level 2
+      dff map_2_lvl2[20];   // Movements of the 2nd Map level 2
+      dff map_3_lvl2[20];   // Movements of the 3rd Map level 2
+      
+      dff answer_player;    // Answer key for which player should be pressing the button
+      dff current_pos[5];   // Current position of the led that is to be displayed on the led screen
+      //dff seed [32];                      // seed for each run
+      dff answer;           // Stores the result of whether the input player is correct after checking with the answer key
+      dff answer_step;      // Stores the result of whether the input step is correct after checking with the answer key
+      dff output_player;    // Stores which player pressed the button
+      dff output_lrud[2];   // Stores the step that the player pressed
+      dff checking;         // Becomes 1 when in entering the IDLE state (checking whether the input is correct)
+      dff difficulty[2];       // Difficulty level of the game
+      dff countdown[3];     // value of the countdown (3/2/1) to be displayed
+      
+      // FSM states
+      fsm state = {START, SET_MAP, SET_START, SET_STEP, COMPUTE_STEP, OUTPUT_STEP, IDLE, COMPUTE_PLAYER, CHECK_PLAYER,
+                   COMPUTE_LRUD, CHECK_STEP, WIN, ERROR};
     }
-    pn_gen rng;
   }
   
   always {
-    reset_cond.in = ~rst_n; // input raw inverted reset signal
-    rst = reset_cond.out;   // conditioned reset
+    reset_cond.in = ~rst_n; // Input raw inverted reset signal
+    rst = reset_cond.out;   // Conditioned reset
     
-    led = 8h00;             // turn LEDs off
-    spi_miso = bz;          // not using SPI
-    spi_channel = bzzzz;    // not using flags
-    avr_rx = bz;            // not using serial port
-    edge_detector.in = bz; // Have 0 output from edge_detector
+    led = 8h00;             // Turn LEDs off
+    spi_miso = bz;          // Not using SPI
+    spi_channel = bzzzz;    // Not using flags
+    avr_rx = bz;            // Not using serial port
+    edge_detector.in = bz;  // Have 0 output from edge_detector
     
-    ctr.rst = rst;
+    ctr.rst = rst;          // Set the counter's reset to the reset button
     
-    io_led = 3x{{8h00}};    // turn LEDs off
-    //io_seg = 8hff;          // turn segments off
-    //io_sel = 4hf;           // select no digits
+    io_led = 3x{{8h00}};    // Turn LEDs off
     
-    rng.seed = seed.q;      // use seed.q as the seed
-    rng.next = 0;           // don't generate new numbers
-    rng.rst = rst;
+    rng.seed = h00000000;   // Set the seed to be all 0
+    rng.next = 0;           // Don't generate new numbers
+    rng.rst = rst;          // Assign the reset_button to the rng module
     
-    alu.firstNumber = 16x{0};  // input zero first
-    alu.secondNumber = 16x{0}; // input zero first
-    alu.alufn = 6x{0};         // input zero first
+    alu.firstNumber = 16x{0};  // Input zero first
+    alu.secondNumber = 16x{0}; // Input zero first
+    alu.alufn = 6x{0};         // Input zero first
     
-    check_player_module.answer_player = 0;  //input zero first
-    check_player_module.player = 0;         //input zero first
+    check_player_module.answer_player = 0;  // Input zero first
+    check_player_module.player = 0;         // Input zero first
     
-    check_step_module.lrud_answer = 00;      //input zero first
-    check_step_module.lrud_player = 00;      //input zero first
+    check_step_module.lrud_answer = 00;     // Input zero first
+    check_step_module.lrud_player = 00;     // Input zero first
+       
+    convert_to_alu.lrud = b00;              // Input zero first
+   
+    // Connect all button inputs to their respective button conditioner and edge_detector
+    button_cond_button0.in = p1_left;
+    edge_detector_button0.in = button_cond_button0.out;
     
-    answer_key_module.current_map = 16x{0}; //input zero first
-    answer_key_module.current_step = 4x{0}; //input zero first
+    button_cond_button1.in = p1_right;
+    edge_detector_button1.in = button_cond_button1.out;
     
-    move.current_pos = 4x{0};               //input zero first
+    button_cond_button2.in = p1_up;
+    edge_detector_button2.in = button_cond_button2.out;
     
-    convert_to_alu.lrud = b00;              //input zero first
+    button_cond_button3.in = p1_down;
+    edge_detector_button3.in = button_cond_button3.out;
     
-    led_module.reg_led = reg_led.q;         //connect reg led to led module
+    button_cond_button4.in = p2_left;
+    edge_detector_button4.in = button_cond_button4.out;
     
+    button_cond_button5.in = p2_right;
+    edge_detector_button5.in = button_cond_button5.out;
+    
+    button_cond_button6.in = p2_up;
+    edge_detector_button6.in = button_cond_button6.out;
+    
+    button_cond_button7.in = p2_down;
+    edge_detector_button7.in = button_cond_button7.out;
+    
+    button_cond_reset.in = reset_button;
+    edge_detector_reset.in = button_cond_reset.out;
+    
+    // Input the data from the buttons into the button module
+    button_module.button0 = edge_detector_button0.out;
+    button_module.button1 = edge_detector_button1.out;
+    button_module.button2 = edge_detector_button2.out;
+    button_module.button3 = edge_detector_button3.out;
+    button_module.button4 = edge_detector_button4.out;  
+    button_module.button5 = edge_detector_button5.out;
+    button_module.button6 = edge_detector_button6.out;
+    button_module.button7 = edge_detector_button7.out;
+    
+    // Input the data from the led module to the led strip module
+    led_ws2812b_0.colors = led_module_2.ledstrip_0;
+    led_ws2812b_1.colors = led_module_2.ledstrip_1;
+    led_ws2812b_2.colors = led_module_2.ledstrip_2;
+    led_ws2812b_3.colors = led_module_2.ledstrip_3;
+    
+    // Input data from led strip module to the led strip
+    led_strip_0 = led_ws2812b_0.data_out;
+    led_strip_1 = led_ws2812b_1.data_out;
+    led_strip_2 = led_ws2812b_2.data_out;
+    led_strip_3 = led_ws2812b_3.data_out;
+    
+    // Outputs the player light leds
+    player1_led = 1 - answer_player.q;
+    player2_led = answer_player.q;
+    
+    // Input zero into the countdown module first
+    compute_countdown.timing = 0;
+    
+    // Initialize countdown to zero first
+    countdown.d = 0;
+    
+    // Input the countdown register values to the output timer(countdown) leds
+    countdown_1 = countdown.q[0];
+    countdown_2 = countdown.q[1];
+    countdown_3 = countdown.q[2];
+    
+    // Connect the current position output to the led module input
+    led_module_2.led_num = current_pos.q;
+    
+    // Debugging with io_led
     /*
-    button_module.button0 = p1_left;
-    button_module.button1 = p1_right;
-    button_module.button2 = p1_up;
-    button_module.button3 = p1_down;
-    button_module.button4 = p2_left;
-    button_module.button5 = p2_right;
-    button_module.button6 = p2_up;
-    button_module.button7 = p2_down; 
-    */
-    
-    button_module.button0 = io_button[0];
-    button_module.button1 = io_button[1];
-    button_module.button2 = 0;
-    button_module.button3 = 0;
-    button_module.button4 = 0;  
-    button_module.button5 = io_button[4];
-    button_module.button6 = 0;
-    button_module.button7 = io_button[2];
-    
-    //connect led module output to actual output
-    led0 = led_module.led0;
-    led1 = led_module.led1;
-    led2 = led_module.led2;
-    led3 = led_module.led3;
-    led4 = led_module.led4;
-    led5 = led_module.led5;
-    led6 = led_module.led6;
-    led7 = led_module.led7;
-    led8 = led_module.led8;
-    led9 = led_module.led9;
-    led10 = led_module.led10;
-    led11 = led_module.led11;
-    led12 = led_module.led12;
-    led13 = led_module.led13;
-    led14 = led_module.led14;
-    led15 = led_module.led15;
-    
-    //io_led[1][7:0] = num.q[15:8];
-    //io_led[0][7:0] = num.q[7:0];
-    io_led[0][0] = map_number.q;
     io_led[0][5:1] = current_pos.q;
     io_led[0][7:6] = current_step.q;
-    io_led[1][2:0] = step_number.q;
-    //io_led[1] = reg_led.q[15:8];
-    //io_led[0] = reg_led.q[7:0];
-    //io_led[1] = alu_answer.q[15:8];
-    //io_led[0] = alu_answer.q[7:0];
-    io_led[2][0] = io_button[0];
-    io_led[2][1] = io_button[1];
-    io_led[2][2] = io_button[2];
-    io_led[2][3] = io_button[3];
-    io_led[2][4] = io_button[4];
+    io_led[1][5:0] = step_number.q;
+    io_led[1][7:6] = difficulty.q;
+    io_led[2][0] = p1_left;
+    io_led[2][1] = p1_right;
+    io_led[2][2] = p1_up;
+    io_led[2][3] = p1_down;
+    io_led[2][4] = p2_left;
+    io_led[2][5] = p2_right;
+    io_led[2][6] = p2_up;
+    io_led[2][7] = p2_down;
+    io_led[1][7] = edge_detector_reset.out;
+    */
+    //io_led[2][2:0] = countdown.q;
     
-    map_0.d = b000001010111; //start at led0 then [right,right,right,down]
-    map_1.d = b111100000010; //start at led15 then [left,left,left,up]
+    // Set all maps here
+    // map[3:0] is starting position
+    // map[5:4] is 1st step, map[7:6] is 2nd step... so on and so forth
+    // 00 is left, 01 is right, 10 is up, 11 is down
+    map_0.d = b110101010000; // Start at led0 then [right,right,right,down]
+    map_1.d = b100000001111; // Start at led15 then [left,left,left,up]
+    map_2.d = b110010001011; // Start at led11 then [left,up,left,down]
+    map_3.d = b110001110101; // Start at led5 then [down,right,left,down]
     
-    if(io_dip[2][7]){
-      edge_detector.in = ctr.value;      // Input value of counter into edge detector
-    }
+    map_0_lvl1.d = b0110001100010010; // Start at led2 then [right,left,down,left,up,right]
+    map_1_lvl1.d = b0011010000100110; // Start at led6 then [up,left,left,right,down,left]
+    map_2_lvl1.d = b1001101110011101; // Start at led13 then [right,up,down,up,right,up]
+    map_3_lvl1.d = b1000110101100100; // Start at led4 then [up,right,right,down,left,up]
+    
+    map_0_lvl2.d = b11000100111010011001; // Start at led9 then [right,up,up,down,left,right,left,down]
+    map_1_lvl2.d = b11010011100011110011; // Start at led3 then [down,down,left,up,down,left,right,down]
+    map_2_lvl2.d = b01010011010110001101; // Start at led13 then [left,up,right,right,down,left,right,right]
+    map_3_lvl2.d = b00100111011100101010; // Start at led10 then [up,left,down,right,down,right,up,left]
+    
+    edge_detector.in = ctr.value; // Input value of counter into edge detector
       
     case (state.q) {
+      // Initial state where all values are reset/initialized
       state.START:
-        //00 is left, 01 is right, 10 is up, 11 is down
-        answer_player.d = 0;     //initialize starting player to answer to be player 1
-        reg_led.d = b00000000000000000;      //initialize all led reg to be 0
-        step_number.d = b000;     //initialize step number to be 0
+        // Initialize or resets all values that needs to be reset before the start of a new game
+        answer_player.d = 0;        // Initialize starting player to answer to be player 1
+        step_number.d = b00000;     // Initialize step number to be 0
         io_led[2][7] = 1;
         checking.d = 0;
-        current_pos.d = 0000;
+        current_pos.d = 20;
         current_map.d = b000000000000;
         
-        if(io_dip[2][7] & edge_detector.out){
+        // When timer is up, transit to the next state
+        // Timer is used to give some time for the player to prepare before the steps are shown
+        if(edge_detector.out){
+          rng.next = 1;
           state.d = state.SET_MAP;
         }
         
+      // State to set the map depending on the random number generated
       state.SET_MAP:
-        io_led[2][6] = 1;
-        rng.next = 1;
-        map_number.d = rng.num[0];
-        if(rng.num[0] == 0){
-          current_map.d = map_0.q;
+        //io_led[2][6] = 1;
+        
+        // Depending on the random number generated and the difficulty level, choose the map to be used this round
+        // Then, save the chosen map as the current map
+        if(difficulty.q == 0){
+          if(rng.num[1:0] == b00){
+            current_map.d = map_0.q;
+          }
+          else if(rng.num[1:0] == 1){
+            current_map.d = map_1.q;
+          }
+          else if(rng.num[1:0] == 2){
+            current_map.d = map_2.q;
+          }
+          else if(rng.num[1:0] == 3){
+            current_map.d = map_3.q;
+          }
         }
-        if(rng.num[0] == 1){
-          current_map.d = map_1.q;
+        else if(difficulty.q == b01){
+          if(rng.num[1:0] == 0){
+            current_map.d = map_0_lvl1.q;
+          }
+          else if(rng.num[1:0] == 1){
+            current_map.d = map_1_lvl1.q;
+          }
+          else if(rng.num[1:0] == 2){
+            current_map.d = map_2_lvl1.q;
+          }
+          else if(rng.num[1:0] == 3){
+            current_map.d = map_3_lvl1.q;
+          }
         }
+        else if(difficulty.q == b10){
+          if(rng.num[1:0] == 0){
+            current_map.d = map_0_lvl2.q;
+          }
+          else if(rng.num[1:0] == 1){
+            current_map.d = map_1_lvl2.q;
+          }
+          else if(rng.num[1:0] == 2){
+            current_map.d = map_2_lvl2.q;
+          }
+          else if(rng.num[1:0] == 3){
+            current_map.d = map_3_lvl2.q;
+          }
+        }
+        
+        // When timer is up, transit to the next state
+        // Timer is used to give some time for the player to prepare before the steps are shown
         if(edge_detector.out){
           state.d = state.SET_START;
         }
-
+      
+      // State to set the starting position by refering to the current map
       state.SET_START:
-        io_led[2][5] = 1;
+        //io_led[2][5] = 1;
         
         //update current step with first 4 bits of map
-        current_pos.d = current_map.q[11:8];
+        current_pos.d = current_map.q[3:0];
         
-        //convert current step to reg_led
-        move.current_pos = current_pos.q;
-        
-        //update reg led with move output
-        reg_led.d = move.reg_led;
-        
+        // When timer is up, transit to the next state
+        // Timer is used to give some time for the player to register the current led shown on the sreen
         if(edge_detector.out){
           state.d = state.SET_STEP;
         }
         
+      // State to grab the current step to be moved from the current map depending on the step number
       state.SET_STEP:
-        io_led[2][4] = 1;
+        //io_led[2][4] = 1;
         
-        //set the step based on step_number
+        // Set the step based on step_number
+        // Increase the step number counter by 1 after the current step is set
+        // Only transit to the next stage when timer is up such that the player has time to register the new step
         if(step_number.q == 0){
-          current_step.d = current_map.q[7:6];
-          if(edge_detector.out & current_step.q == current_map.q[7:6]){
-          step_number.d = step_number.q + 1;
-          state.d = state.COMPUTE_STEP;
+          current_step.d = current_map.q[5:4];
+          if(edge_detector.out){
+            step_number.d = step_number.q + 1;
+            state.d = state.COMPUTE_STEP;
           }
         }
         else if(step_number.q == 1){
-          current_step.d = current_map.q[5:4];
-          if(edge_detector.out & current_step.q == current_map.q[5:4]){
-          step_number.d = step_number.q + 1;
-          state.d = state.COMPUTE_STEP;
+          current_step.d = current_map.q[7:6];
+          if(edge_detector.out){
+            step_number.d = step_number.q + 1;
+            state.d = state.COMPUTE_STEP;
           }
         }
         else if(step_number.q == 2){
-          current_step.d = current_map.q[3:2];
-          if(edge_detector.out & current_step.q == current_map.q[3:2]){
-          step_number.d = step_number.q + 1;
-          state.d = state.COMPUTE_STEP;
+          current_step.d = current_map.q[9:8];
+          if(edge_detector.out){
+            step_number.d = step_number.q + 1;
+            state.d = state.COMPUTE_STEP;
           }
         }
         else if(step_number.q == 3){
-          current_step.d = current_map.q[1:0];
-          if(edge_detector.out & current_step.q == current_map.q[1:0]){
-          step_number.d = step_number.q + 1;
-          state.d = state.COMPUTE_STEP;
+          current_step.d = current_map.q[11:10];
+          if(edge_detector.out){
+            step_number.d = step_number.q + 1;
+            state.d = state.COMPUTE_STEP;
+          }
+        }
+        else if(step_number.q == 4){
+          current_step.d = current_map.q[13:12];
+          if(edge_detector.out){
+            step_number.d = step_number.q + 1;
+            state.d = state.COMPUTE_STEP;
+          }
+        }
+        else if(step_number.q == 5){
+          current_step.d = current_map.q[15:14];
+          if(edge_detector.out){
+            step_number.d = step_number.q + 1;
+            state.d = state.COMPUTE_STEP;
+          }
+        }
+        else if(step_number.q == 6){
+          current_step.d = current_map.q[17:16];
+          if(edge_detector.out){
+            step_number.d = step_number.q + 1;
+            state.d = state.COMPUTE_STEP;
+          }
+        }
+        else if(step_number.q == 7){
+          current_step.d = current_map.q[19:18];
+          if(edge_detector.out){
+            step_number.d = step_number.q + 1;
+            state.d = state.COMPUTE_STEP;
           }
         }
       
+      // State to compute the step
       state.COMPUTE_STEP:
-        io_led[2][3] = 1;
-        //input current step into convert_to_alu
+        //io_led[2][3] = 1;
+        // Input current step into alu
+        // Perform relevant calculations according to the step
+        // Instructions to be keyed into alu are done in the convert_to_alu module
+        // Actual calculations are done in the new_alu module
+        // Left (minus 1), Right(Plus 1), Up(minus 4), Down(plus 4)
         convert_to_alu.lrud = current_step.q;
-        //step_number.d = step_number.q + 1;
         alu.firstNumber = current_pos.q;
         alu.secondNumber = convert_to_alu.value;
         alu.alufn = convert_to_alu.alufn;
-        //update the new current pos
+        
+        // Update the new current pos
         current_pos.d = alu.answer[3:0];
         state.d = state.OUTPUT_STEP;
       
+      // State to show the new step and give time to the player to register the new step
       state.OUTPUT_STEP:
-        io_led[2][2] = 1;
-        //convert current step to reg_led
-        move.current_pos = current_pos.q;
-        //update reg led with move output
-        reg_led.d = move.reg_led;
+        //io_led[2][2] = 1;
+        
+        // If in the checking player's answers mode, go directly to the idle state
         if(checking.q == 1){
           ctr.rst = 1;
           state.d = state.IDLE;
         }
-        else if(edge_detector.out & step_number.q == 4){
-          // Re-initialize the step number and the current pos
-          ctr.rst = 1;
-          step_number.d = 0;
-          current_pos.d = current_map.q[11:8];
-          state.d = state.IDLE;
+        
+        // If step number has reached the final step according to the difficulty level, then proceed to idle state
+        // Else go back to the set step state
+        if(edge_detector.out & difficulty.q == 0){
+          if(step_number.q == 4){
+            // Re-initialize the step number and the current pos
+            ctr.rst = 1;
+            step_number.d = 0;
+            current_pos.d = current_map.q[3:0];
+            state.d = state.IDLE;
+          }
+          else{
+            state.d = state.SET_STEP;
+          }
         }
-        else if(edge_detector.out){
-          state.d = state.SET_STEP;
+        else if(edge_detector.out & difficulty.q == 1){
+          if(step_number.q == 6){
+            // Re-initialize the step number and the current pos
+            ctr.rst = 1;
+            step_number.d = 0;
+            current_pos.d = current_map.q[3:0];
+            state.d = state.IDLE;
+          }
+          else{
+            state.d = state.SET_STEP;
+          }
+        }
+        else if(edge_detector.out & difficulty.q == 2){
+          if(step_number.q == 8){
+            // Re-initialize the step number and the current pos
+            ctr.rst = 1;
+            step_number.d = 0;
+            current_pos.d = current_map.q[3:0];
+            state.d = state.IDLE;
+          }
+          else{
+            state.d = state.SET_STEP;
+          }
         }
       
+      // The state that waits for player button press and saves the next step that the player should input
       state.IDLE:
-        io_led[2][1] = 1;
-        io_led[1][7:0] = ctr.value;
+        //io_led[2][1] = 1;
         
+        // Set the reg to 1 to show that we are in the checking process
         checking.d = 1;
-        //convert current step to reg_led
-        move.current_pos = current_pos.q;
-        //update reg led with move output
-        reg_led.d = move.reg_led;
         
-        if(ctr.value == 30){  //this is ard 10sec
+        // Convert counter value to the values to be outputed on the 3 timer leds
+        compute_countdown.timing = 3 - ctr.value/4;
+        countdown.d = compute_countdown.led_val;
+        
+        // When counter value reaches 30 is ard <10sec therefore when everytime counter reaches 4 is roughly 1sec
+        // This gives us a rough estimate of 3 sec when counter reaches 12
+        if(ctr.value == 12){
           state.d = state.ERROR;
         }
         
+        // Set the current step(answer key) according to the step_number
         if(step_number.q == 0){
-          current_step.d = current_map.q[7:6];
-        }
-        else if(step_number.q == 1){
           current_step.d = current_map.q[5:4];
         }
+        else if(step_number.q == 1){
+          current_step.d = current_map.q[7:6];
+        }
         else if(step_number.q == 2){
-          current_step.d = current_map.q[3:2];
+          current_step.d = current_map.q[9:8];
         }
         else if(step_number.q == 3){
-          current_step.d = current_map.q[1:0];
+          current_step.d = current_map.q[11:10];
         }
-        /*
-        if(p1_left == 1 | p1_right == 1 | p1_up == 1 | p1_down == 1 | p2_left == 1 | p2_right == 1 | p2_up == 1 | p2_down == 1){
-          state.d = state.CHECK_PLAYER;
-        }*/
+        else if(step_number.q == 4){
+          current_step.d = current_map.q[13:12];
+        }
+        else if(step_number.q == 5){
+          current_step.d = current_map.q[15:14];
+        }
+        else if(step_number.q == 6){
+          current_step.d = current_map.q[17:16];
+        }
+        else if(step_number.q == 7){
+          current_step.d = current_map.q[19:18];
+        }
         
-        if(io_button[0] == 1 | io_button[1] == 1 | io_button[2] == 1 | io_button[3] == 1 | io_button[4] == 1){
+        // Only when any one of the button is pressed, will it go to the next state
+        // Saves the value of which player pressed as well as which direction they pressed
+        if(edge_detector_button0.out == 1 | edge_detector_button1.out == 1 | edge_detector_button2.out == 1 | edge_detector_button3.out == 1 | edge_detector_button4.out == 1 | edge_detector_button5.out == 1 | edge_detector_button6.out == 1 | edge_detector_button7.out == 1){
           output_player.d = button_module.player;
           output_lrud.d = button_module.lrud;
           state.d = state.COMPUTE_PLAYER;
         }
         
+      // State that checks whether the correct player pressed the button and saves the answer in the corresponding register
       state.COMPUTE_PLAYER:
+        // Inputs the player that pressed into the check player module that uses the ALU's CMPEQ function
+        // Outputs the answer into the answer register
         check_player_module.answer_player = answer_player.q;
         check_player_module.player = output_player.q;
         answer.d = check_player_module.check_player;
         state.d = state.CHECK_PLAYER;
         
+      // State that checks if the answer is correct
+      // If it is correct, go on to the compute lrud state
+      // Else, go to the error state
       state.CHECK_PLAYER:
-        io_led[2][0] = 1;
-        io_led[1][0] = answer.q;
+        //io_led[2][0] = 1;
+        //io_led[1][0] = answer.q;
         if(answer.q == 1){
+          // Flip the answer of the correct player to the other player
           answer_player.d = 1 - answer_player.q;
           state.d = state.COMPUTE_LRUD;
         }
@@ -351,46 +548,73 @@ module mojo_top (
           state.d = state.ERROR;
         }
       
-        
+      // State to check whether the player input the correct step using the check_step_module which uses the CMPEQ ALU function
       state.COMPUTE_LRUD:
         check_step_module.lrud_player = output_lrud.q;
         check_step_module.lrud_answer = current_step.q;
         answer_step.d = check_step_module.out;
         state.d = state.CHECK_STEP;
         
+      // If correct, check if it is the last step according to the corresponding difficulty level
+      // If it is the last step, go to the win state
+      // Else, go back to the compute step state to display the new position
+      // If it is wrong, go to the error state
       state.CHECK_STEP:
-        io_led[2][1] = 1;
+        //io_led[2][1] = 1;
         
         if(answer_step.q == 1){
-          if(current_step.q == 3){
-            state.d = state.WIN;
+          if(difficulty.q == 0){
+            if(step_number.q == 3){
+              state.d = state.WIN;
+            }
+            else{
+              step_number.d = step_number.q + 1;
+              state.d = state.COMPUTE_STEP;
+            }
           }
-          else{
-            step_number.d = step_number.q + 1;
-            state.d = state.WAIT;
+          else if(difficulty.q == 1){
+            if(step_number.q == 5){
+              state.d = state.WIN;
+            }
+            else{
+              step_number.d = step_number.q + 1;
+              state.d = state.COMPUTE_STEP;
+            }
+          }
+          else if(difficulty.q == 2){
+            if(step_number.q == 7){
+              state.d = state.WIN;
+            }
+            else{
+              step_number.d = step_number.q + 1;
+              state.d = state.COMPUTE_STEP;
+            }
           }
         }
         else{
           state.d = state.ERROR;
         }
-      
         
-      state.WAIT:
-        if(io_button[0] == 0 & io_button[1] == 0 & io_button[2] == 0 & io_button[3] == 0 & io_button[4] == 0){
-          state.d = state.COMPUTE_STEP;
-        }
-        
+      // State to display the winning screen and increase difficulty if the reset button is pressed
       state.WIN:
-        //on alternate led
-        reg_led.d = b1010101010101010;
-        if(io_button[3]){
+        // Set all led to green
+        current_pos.d = 16;
+        if(edge_detector_reset.out){
+          if(difficulty.q <2){
+            difficulty.d = difficulty.q + 1;
+          }
+          else{
+            difficulty.d = 0;
+          }
           state.d = state.START;
         }
         
+      // State to display the wrong input screen and reset difficulty to 0 if the reset button is pressed
       state.ERROR:
-        //on all led
-        reg_led.d = b1111111111111111;
-        if(io_button[3]){
+        // Set all led to red
+        current_pos.d = 17;
+        if(edge_detector_reset.out){
+          difficulty.d = 0;
           state.d = state.START;
         }
     }

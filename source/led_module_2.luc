@@ -1,0 +1,77 @@
+module led_module_2 (
+    output ledstrip_0[96],
+    output ledstrip_1[96],
+    output ledstrip_2[96],
+    output ledstrip_3[96],
+    input led_num[5]
+  ) {
+
+  always {
+    ledstrip_0 = h000000000000000000000000;
+    ledstrip_1 = h000000000000000000000000;
+    ledstrip_2 = h000000000000000000000000;
+    ledstrip_3 = h000000000000000000000000;
+    if(led_num==0){
+      ledstrip_0 = hFFFFFF000000000000000000;
+    }
+    else if(led_num==1){
+      ledstrip_1 = hFFFFFF000000000000000000;
+    }
+    else if(led_num==2){
+      ledstrip_2 = hFFFFFF000000000000000000;
+    }
+    else if(led_num==3){
+      ledstrip_3 = hFFFFFF000000000000000000;
+    }
+    else if(led_num==4){
+      ledstrip_0 = h000000FFFFFF000000000000;
+    }
+    else if(led_num==5){
+      ledstrip_1 = h000000FFFFFF000000000000;
+    }
+    else if(led_num==6){
+      ledstrip_2 = h000000FFFFFF000000000000;
+    }
+    else if(led_num==7){
+      ledstrip_3 = h000000FFFFFF000000000000;
+    }
+    else if(led_num==8){
+      ledstrip_0 = h000000000000FFFFFF000000;
+    }
+    else if(led_num==9){
+      ledstrip_1 = h000000000000FFFFFF000000;
+    }
+    else if(led_num==10){
+      ledstrip_2 = h000000000000FFFFFF000000;
+    }
+    else if(led_num==11){
+      ledstrip_3 = h000000000000FFFFFF000000;
+    }
+    else if(led_num==12){
+      ledstrip_0 = h000000000000000000FFFFFF;
+    }
+    else if(led_num==13){
+      ledstrip_1 = h000000000000000000FFFFFF;
+    }
+    else if(led_num==14){
+      ledstrip_2 = h000000000000000000FFFFFF;
+    }
+    else if(led_num==15){
+      ledstrip_3 = h000000000000000000FFFFFF;
+    }
+    else if(led_num==16){
+      //win state
+      ledstrip_0 = h0000FF0000FF0000FF0000FF;
+      ledstrip_1 = h0000FF0000FF0000FF0000FF;
+      ledstrip_2 = h0000FF0000FF0000FF0000FF;
+      ledstrip_3 = h0000FF0000FF0000FF0000FF;
+    }
+    else if(led_num==17){
+      //error state
+      ledstrip_0 = h00FF0000FF0000FF0000FF00;
+      ledstrip_1 = h00FF0000FF0000FF0000FF00;
+      ledstrip_2 = h00FF0000FF0000FF0000FF00;
+      ledstrip_3 = h00FF0000FF0000FF0000FF00;
+    }
+  }
+}

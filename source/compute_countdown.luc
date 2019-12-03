@@ -1,0 +1,18 @@
+module compute_countdown (
+    input timing[2],
+    output led_val[3]
+  ) {
+
+  always {
+    led_val = b000;
+    if(timing == 3){
+      led_val = b111;
+    }
+    else if(timing == 2){
+      led_val = b011;
+    }
+    if(timing == 1){
+      led_val = b001;
+    }
+  }
+}

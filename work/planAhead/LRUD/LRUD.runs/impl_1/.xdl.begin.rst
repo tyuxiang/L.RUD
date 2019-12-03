@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<ProcessHandle Version="1" Minor="0">
-    <Process Command="xdl" Owner="ljl19" Host="LAPTOP-6CLME3GQ" Pid="22660">
-    </Process>
-</ProcessHandle>
