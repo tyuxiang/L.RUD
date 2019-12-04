@@ -12,10 +12,7 @@ module mojo_top (
     output avr_rx,          // AVR RX (FPGA TX)
     input avr_rx_busy,      // AVR RX buffer full
     output io_led [3][8],   // LEDs on IO Shield
-    //output io_seg [8],    // 7-segment LEDs on IO Shield
-    //output io_sel [4],    // Digit select on IO Shield
     input io_button [5],    // 5 buttons on IO Shield
-    //input io_dip[3][8],   // DIP switches on IO Shield
     output led_strip_0,     // Output 1st column of led strip
     output led_strip_1,     // Output 2nd column of led strip
     output led_strip_2,     // Output 3rd column of led strip
@@ -105,7 +102,6 @@ module mojo_top (
       
       dff answer_player;    // Answer key for which player should be pressing the button
       dff current_pos[5];   // Current position of the led that is to be displayed on the led screen
-      //dff seed [32];                      // seed for each run
       dff answer;           // Stores the result of whether the input player is correct after checking with the answer key
       dff answer_step;      // Stores the result of whether the input step is correct after checking with the answer key
       dff output_player;    // Stores which player pressed the button
@@ -217,24 +213,6 @@ module mojo_top (
     
     // Connect the current position output to the led module input
     led_module_2.led_num = current_pos.q;
-    
-    // Debugging with io_led
-    /*
-    io_led[0][5:1] = current_pos.q;
-    io_led[0][7:6] = current_step.q;
-    io_led[1][5:0] = step_number.q;
-    io_led[1][7:6] = difficulty.q;
-    io_led[2][0] = p1_left;
-    io_led[2][1] = p1_right;
-    io_led[2][2] = p1_up;
-    io_led[2][3] = p1_down;
-    io_led[2][4] = p2_left;
-    io_led[2][5] = p2_right;
-    io_led[2][6] = p2_up;
-    io_led[2][7] = p2_down;
-    io_led[1][7] = edge_detector_reset.out;
-    */
-    //io_led[2][2:0] = countdown.q;
     
     // Set all maps here
     // map[3:0] is starting position
