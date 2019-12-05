@@ -79,7 +79,7 @@ module mojo_top (
     // Initialize random number generator
     pn_gen rng;
     
-    counter ctr (#SIZE(8), #DIV(24));   // Initialize counter to count every 2^25(~33.5 million) clock cycle, on MOJO is 50 million clock cycle per reset_cond
+    counter ctr (#SIZE(8), #DIV(24));   // Initialize counter to count every 2^24(~18 million) clock cycle, on MOJO is 50 million clock cycle per reset_cond
     .rst(rst) {
       dff current_map[20];  // Map that is used for the current run
       dff current_step[2];  // Step(Left/Right/Up/Down) that is used currently
@@ -254,9 +254,7 @@ module mojo_top (
         }
         
       // State to set the map depending on the random number generated
-      state.SET_MAP:
-        //io_led[2][6] = 1;
-        
+      state.SET_MAP:        
         // Depending on the random number generated and the difficulty level, choose the map to be used this round
         // Then, save the chosen map as the current map
         if(difficulty.q == 0){
@@ -309,9 +307,7 @@ module mojo_top (
         }
       
       // State to set the starting position by refering to the current map
-      state.SET_START:
-        //io_led[2][5] = 1;
-        
+      state.SET_START:        
         //update current step with first 4 bits of map
         current_pos.d = current_map.q[3:0];
         
@@ -322,9 +318,7 @@ module mojo_top (
         }
         
       // State to grab the current step to be moved from the current map depending on the step number
-      state.SET_STEP:
-        //io_led[2][4] = 1;
-        
+      state.SET_STEP:        
         // Set the step based on step_number
         // Increase the step number counter by 1 after the current step is set
         // Only transit to the next stage when timer is up such that the player has time to register the new step
@@ -387,7 +381,6 @@ module mojo_top (
       
       // State to compute the step
       state.COMPUTE_STEP:
-        //io_led[2][3] = 1;
         // Input current step into alu
         // Perform relevant calculations according to the step
         // Instructions to be keyed into alu are done in the convert_to_alu module
@@ -403,9 +396,7 @@ module mojo_top (
         state.d = state.OUTPUT_STEP;
       
       // State to show the new step and give time to the player to register the new step
-      state.OUTPUT_STEP:
-        //io_led[2][2] = 1;
-        
+      state.OUTPUT_STEP:        
         // If in the checking player's answers mode, go directly to the idle state
         if(checking.q == 1){
           if(edge_detector.out){
@@ -455,9 +446,7 @@ module mojo_top (
         }
       
       // The state that waits for player button press and saves the next step that the player should input
-      state.IDLE:
-        //io_led[2][1] = 1;
-        
+      state.IDLE:        
         // Set the reg to 1 to show that we are in the checking process
         checking.d = 1;
         
@@ -518,8 +507,6 @@ module mojo_top (
       // If it is correct, go on to the compute lrud state
       // Else, go to the error state
       state.CHECK_PLAYER:
-        //io_led[2][0] = 1;
-        //io_led[1][0] = answer.q;
         if(answer.q == 1){
           // Flip the answer of the correct player to the other player
           answer_player.d = 1 - answer_player.q;
@@ -540,9 +527,7 @@ module mojo_top (
       // If it is the last step, go to the win state
       // Else, go back to the compute step state to display the new position
       // If it is wrong, go to the error state
-      state.CHECK_STEP:
-        //io_led[2][1] = 1;
-        
+      state.CHECK_STEP:        
         if(answer_step.q == 1){
           if(difficulty.q == 0){
             if(step_number.q == 3){
