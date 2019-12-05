@@ -408,46 +408,49 @@ module mojo_top (
         
         // If in the checking player's answers mode, go directly to the idle state
         if(checking.q == 1){
-          ctr.rst = 1;
-          state.d = state.IDLE;
-        }
-        
-        // If step number has reached the final step according to the difficulty level, then proceed to idle state
-        // Else go back to the set step state
-        if(edge_detector.out & difficulty.q == 0){
-          if(step_number.q == 4){
-            // Re-initialize the step number and the current pos
+          if(edge_detector.out){
             ctr.rst = 1;
-            step_number.d = 0;
-            current_pos.d = current_map.q[3:0];
             state.d = state.IDLE;
           }
-          else{
-            state.d = state.SET_STEP;
-          }
         }
-        else if(edge_detector.out & difficulty.q == 1){
-          if(step_number.q == 6){
-            // Re-initialize the step number and the current pos
-            ctr.rst = 1;
-            step_number.d = 0;
-            current_pos.d = current_map.q[3:0];
-            state.d = state.IDLE;
+        else{
+          // If step number has reached the final step according to the difficulty level, then proceed to idle state
+          // Else go back to the set step state
+          if(edge_detector.out & difficulty.q == 0){
+            if(step_number.q == 4){
+              // Re-initialize the step number and the current pos
+              ctr.rst = 1;
+              step_number.d = 0;
+              current_pos.d = current_map.q[3:0];
+              state.d = state.IDLE;
+            }
+            else{
+              state.d = state.SET_STEP;
+            }
           }
-          else{
-            state.d = state.SET_STEP;
+          else if(edge_detector.out & difficulty.q == 1){
+            if(step_number.q == 6){
+              // Re-initialize the step number and the current pos
+              ctr.rst = 1;
+              step_number.d = 0;
+              current_pos.d = current_map.q[3:0];
+              state.d = state.IDLE;
+            }
+            else{
+              state.d = state.SET_STEP;
+            }
           }
-        }
-        else if(edge_detector.out & difficulty.q == 2){
-          if(step_number.q == 8){
-            // Re-initialize the step number and the current pos
-            ctr.rst = 1;
-            step_number.d = 0;
-            current_pos.d = current_map.q[3:0];
-            state.d = state.IDLE;
-          }
-          else{
-            state.d = state.SET_STEP;
+          else if(edge_detector.out & difficulty.q == 2){
+            if(step_number.q == 8){
+              // Re-initialize the step number and the current pos
+              ctr.rst = 1;
+              step_number.d = 0;
+              current_pos.d = current_map.q[3:0];
+              state.d = state.IDLE;
+            }
+            else{
+              state.d = state.SET_STEP;
+            }
           }
         }
       
